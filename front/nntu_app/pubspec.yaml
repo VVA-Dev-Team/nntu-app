@@ -39,6 +39,8 @@ dependencies:
   animated_toggle_switch: ^0.5.2
   photo_view: ^0.14.0
   bottom_navy_bar: ^6.0.0
+  http: ^0.13.4
+  cached_network_image: ^3.2.1
 
 
   # The following adds the Cupertino Icons font to your application.

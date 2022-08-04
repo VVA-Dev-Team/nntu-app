@@ -1,6 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+const kDebugMode = true;
+
+const debugHostUrl = 'http://10.0.2.2:5000/';
+const releaseHostUrl = 'https://nntuapp.api.vvadev.ru/';
 
 TextStyle kTextH1 =
     GoogleFonts.getFont('Roboto', fontSize: 24, color: kTextColor);

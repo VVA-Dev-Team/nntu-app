@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -91,7 +89,7 @@ class _ListItebDayWidget extends StatelessWidget {
   final String endTime;
   final String title;
   final String description;
-  final Bool? isfullInfo;
+  final bool? isfullInfo;
   const _ListItebDayWidget({
     Key? key,
     required this.startTime,
