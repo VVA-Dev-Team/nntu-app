@@ -12,7 +12,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int _sellectedPage = 0;
+  int _sellectedPage = 4;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
