@@ -1,8 +1,10 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:nntu_app/constants.dart';
+import 'package:nntu_app/controllers/map_controller.dart';
 import 'package:nntu_app/widgets/screen_hader.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 // Карта вуза
@@ -14,12 +16,42 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen>
+    with SingleTickerProviderStateMixin {
   int _categoryIndex = 0;
   int _selectedFloor = 1;
   int _selectedBuilding = 1;
-  final _floor = [1, 2, 3];
-  final _buildings = [1, 2, 3, 4, 5, 6];
+
+  late AnimationController _controller;
+
+  String getImageURL() {
+    String imageURL = '';
+
+    switch (_selectedBuilding) {
+      case 1:
+        break;
+      default:
+    }
+
+    return '';
+  }
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+        vsync: this,
+        duration: const Duration(seconds: 2),
+        lowerBound: 0.0,
+        upperBound: 1.0);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -94,7 +126,7 @@ class _MapScreenState extends State<MapScreen> {
                         child: AnimatedToggleSwitch<int>.size(
                           innerColor: kSecondaryColor,
                           current: _selectedFloor,
-                          values: _floor,
+                          values: getFloors(_selectedBuilding),
                           iconOpacity: 0.2,
                           borderColor: kPrimaryColor,
                           borderRadius: BorderRadius.circular(20.0),
@@ -114,7 +146,7 @@ class _MapScreenState extends State<MapScreen> {
                         child: AnimatedToggleSwitch<int>.size(
                           innerColor: kSecondaryColor,
                           current: _selectedBuilding,
-                          values: _buildings,
+                          values: getBuildings(),
                           iconOpacity: 0.2,
                           borderColor: kPrimaryColor,
                           borderRadius: BorderRadius.circular(20.0),
@@ -137,13 +169,80 @@ class _MapScreenState extends State<MapScreen> {
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: PhotoView(
-              imageProvider: const AssetImage('assets/1level non-active 6.png'),
-              minScale: PhotoViewComputedScale.contained * 0.7,
-              maxScale: PhotoViewComputedScale.covered * 2.0,
-              enableRotation: true,
-              backgroundDecoration: const BoxDecoration(color: kPrimaryColor),
-              tightMode: true,
+            child: ExtendedImage.network(
+              'https://nntuapp.api.vvadev.ru/static/navigate/1_building/1101.png',
+              fit: BoxFit.contain,
+              enableLoadState: true,
+              mode: ExtendedImageMode.gesture,
+              initGestureConfigHandler: (state) {
+                return GestureConfig(
+                  minScale: 0.9,
+                  animationMinScale: 0.7,
+                  maxScale: 3.0,
+                  animationMaxScale: 3.5,
+                  speed: 1.0,
+                  inertialSpeed: 100.0,
+                  initialScale: 1.0,
+                  inPageView: false,
+                  initialAlignment: InitialAlignment.center,
+                );
+              },
+              cache: true,
+              loadStateChanged: (ExtendedImageState state) {
+                switch (state.extendedImageLoadState) {
+                  case LoadState.loading:
+                    _controller.reset();
+                    return Lottie.asset('assets/loadingDragoAnimation.json',
+                        fit: BoxFit.fill);
+                  case LoadState.completed:
+                    _controller.forward();
+                    return FadeTransition(
+                      opacity: _controller,
+                      child: ExtendedImage.network(
+                        'https://nntuapp.api.vvadev.ru/static/navigate/1_building/1101.png',
+                        fit: BoxFit.contain,
+                        enableLoadState: true,
+                        mode: ExtendedImageMode.gesture,
+                        initGestureConfigHandler: (state) {
+                          return GestureConfig(
+                            minScale: 0.9,
+                            animationMinScale: 0.7,
+                            maxScale: 3.0,
+                            animationMaxScale: 3.5,
+                            speed: 1.0,
+                            inertialSpeed: 100.0,
+                            initialScale: 1.0,
+                            inPageView: false,
+                            initialAlignment: InitialAlignment.center,
+                          );
+                        },
+                      ),
+                    );
+                  case LoadState.failed:
+                    _controller.reset();
+                    return GestureDetector(
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Lottie.asset('assets/errorAnimation.json',
+                              fit: BoxFit.fill),
+                          const Positioned(
+                            bottom: 0.0,
+                            left: 0.0,
+                            right: 0.0,
+                            child: Text(
+                              "load image failed, click to reload",
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        ],
+                      ),
+                      onTap: () {
+                        state.reLoadImage();
+                      },
+                    );
+                }
+              },
             ),
           ),
         ],
@@ -151,5 +250,3 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 }
-
-

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nntu_app/constants.dart';
@@ -31,7 +30,7 @@ Future<dynamic> getDataGetRequest(String apiUrl, BuildContext context) async {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Ошибка запроса'),
+            title: const Text('Ошибка запроса'),
             content: Text('$e'),
           );
         });

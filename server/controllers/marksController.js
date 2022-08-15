@@ -12,6 +12,12 @@ class MarksController {
             'method': 'POST',
             'url': 'https://www.nntu.ru/frontend/web/student_info.php',
             'headers': {
+                'Referer': 'https://www.nntu.ru/content/studentam/uspevaemost',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Connection': 'keep-alive',
+                'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+                'Accept': '*/*',
             },
             formData: {
                 'last_name': query.last_name,
@@ -25,7 +31,12 @@ class MarksController {
             if (error) throw new Error(error);
             if (response.body.includes('Студент не найден.')) {
                 return next(ApiError.forbidden('Студент не найден'))
+            }
+            if (response.statusCode !== 200) {
+                return next(ApiError.internal('Непредвиденная ошибка'))
             } else {
+                console.log(response.body)
+                console.log(response.statusCode)
                 try {
                     var scrapedData = {
                         marks: [],
@@ -35,10 +46,10 @@ class MarksController {
                             term: []
                         },
                     }
-                    const $ = cheerio.load(response.body,null, false);
+                    const $ = cheerio.load(response.body, null, false);
 
                     $('table').each((index2, element2) => {
-                        const el = cheerio.load(element2,null, false);
+                        const el = cheerio.load(element2, null, false);
                         var table = []
                         el('tbody > tr').each((index, element) => {
                             const tds = $(element).find('td')
@@ -59,15 +70,14 @@ class MarksController {
                         }
 
                     })
-                    // console.log(scrapedData['marks'])
                     var index = 0
                     var average = 0
                     var count = 0
-                    scrapedData['marks'].forEach(function(semester) {
+                    scrapedData['marks'].forEach(function (semester) {
                         index += 1
                         var termAverage = 0
                         var termCount = 0
-                        semester.forEach(function(el)  {
+                        semester.forEach(function (el) {
                             if (el['session'] >= '0' && el['session'] <= '5') {
                                 if (el['predmet'] in scrapedData['stat']) {
                                     scrapedData['stat']['predmets'][el['predmet']].push(Number(el['session']))
@@ -88,7 +98,6 @@ class MarksController {
                         scrapedData['stat']['term'].push((termAverage / termCount).toFixed(2))
                     })
                     scrapedData['stat']['average'] = (average / count).toFixed(2);
-                    // console.log(scrapedData);
                     res.json(scrapedData)
                 } catch (e) {
                     return next(ApiError.bedRequest(`${e}`))

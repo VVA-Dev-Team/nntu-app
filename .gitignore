@@ -78,3 +78,6 @@
 /front/nntu_app/lib/keys.dart
 /server/node_modules/
 /server/server.rar
+
+.env
+.gitignore

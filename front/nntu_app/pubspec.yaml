@@ -37,10 +37,12 @@ dependencies:
   pull_to_refresh: ^2.0.0
   toggle_switch: ^2.0.1
   animated_toggle_switch: ^0.5.2
-  photo_view: ^0.14.0
   bottom_navy_bar: ^6.0.0
   http: ^0.13.4
-  cached_network_image: ^3.2.1
+  extended_image: ^6.2.1
+  lottie: ^1.4.1
+  webview_flutter: ^3.0.4
+  shimmer: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -71,8 +73,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/1level non-active 6.png
-  #   - images/a_dot_ham.jpeg
+    - assets/errorAnimation.json
+    - assets/loadingDragoAnimation.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

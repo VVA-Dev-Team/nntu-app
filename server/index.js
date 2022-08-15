@@ -1,8 +1,11 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const fileUpload = require('express-fileupload')
 const router = require('./routes/index')
 const errorHandler = require('./middleware/ErrorHandlingMiddleware')
+const sequelize = require('./db')
+const models = require('./models/models')
 
 // для https
 const fs = require('fs');
@@ -13,8 +16,10 @@ const PORT = process.env.PORT || 5000
 
 const app = express()
 app.use(cors())
+app.use(express.json())
+app.use(fileUpload({}))
 app.use('/api', router)
-app.use('/static', express.static('images'))
+app.use('/static', express.static('static'))
 
 
 // всегда в конце (обработка ошибок)
@@ -23,11 +28,15 @@ app.use(errorHandler)
 
 const start = async () => {
     try {
+
+        await sequelize.authenticate()
+        await sequelize.sync()
+
         if (process.env.HTTPS == 1) {
             // Certificate
-            const privateKey = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/privkey.pem', 'utf8');
-            const certificate = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/cert.pem', 'utf8');
-            const ca = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/chain.pem', 'utf8');
+            const privateKey = fs.readFileSync('/etc/letsencrypt/live/nntuapp.api.vvadev.ru/privkey.pem', 'utf8');
+            const certificate = fs.readFileSync('/etc/letsencrypt/live/nntuapp.api.vvadev.ru/cert.pem', 'utf8');
+            const ca = fs.readFileSync('/etc/letsencrypt/live/nntuapp.api.vvadev.ru/chain.pem', 'utf8');
 
             const credentials = {
                 key: privateKey,
