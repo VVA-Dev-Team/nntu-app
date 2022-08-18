@@ -49,6 +49,44 @@ class EventsController {
         }
     }
 
+    async editEvents(req, res, next) {
+        try {
+            const {
+                id,
+                title,
+                description,
+                type,
+                startTime,
+                link,
+                color,
+                oldFileName,
+                addedBy,
+            } = req.body
+            let fileName
+            try {
+                const {img} = req.files
+                fileName = uuid.v4() + ".jpg"
+                await img.mv(path.resolve(__dirname, '..', 'static/events', fileName))
+            } catch (e) {
+                fileName = oldFileName
+            }
+            const schedule = await Events.update({
+                title,
+                description,
+                type,
+                startTime,
+                fileName,
+                link,
+                color,
+                addedBy: addedBy,
+            }, {where: {id: id}})
+            return res.json(schedule)
+        } catch (e) {
+            console.log(e)
+            return next(ApiError.bedRequest('Не заданы параметры'))
+        }
+    }
+
     async addEventsBySystem(req, res, next) {
         try {
             const {

@@ -12,12 +12,8 @@ class MarksController {
             'method': 'POST',
             'url': 'https://www.nntu.ru/frontend/web/student_info.php',
             'headers': {
-                'Referer': 'https://www.nntu.ru/content/studentam/uspevaemost',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 'Connection': 'keep-alive',
-                'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-                'Accept': '*/*',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
             },
             formData: {
                 'last_name': query.last_name,
@@ -95,7 +91,7 @@ class MarksController {
                                 }
                             }
                         })
-                        scrapedData['stat']['term'].push((termAverage / termCount).toFixed(2))
+                        scrapedData['stat']['term'].push(isNaN((termAverage / termCount).toFixed(2)) ? '-' : (termAverage / termCount).toFixed(2))
                     })
                     scrapedData['stat']['average'] = (average / count).toFixed(2);
                     res.json(scrapedData)

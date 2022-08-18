@@ -2,10 +2,12 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:nntu_app/constants.dart';
-import 'package:nntu_app/controllers/http_controller.dart';
+import 'package:nntu_app/models/http_controller.dart';
 import 'package:nntu_app/screens/web_view_page.dart';
-import 'package:nntu_app/widgets/screen_hader.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:nntu_app/theme/theme_manager.dart';
+import 'package:nntu_app/widgets/screen_scaffold.dart';
+import 'package:provider/provider.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:shimmer/shimmer.dart';
 
 // Новости
@@ -52,54 +54,60 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: kPrimaryColor,
-      child: Column(
-        children: [
-          const ScreenHader(title: 'События'),
-          Container(
-              child: isError
-                  ? Center(
-                      child: Lottie.asset('assets/errorAnimation.json',
-                          fit: BoxFit.fill),
-                    )
-                  : Expanded(
-                      child: isLoading
-                          ? Shimmer.fromColors(
-                              baseColor: const Color.fromARGB(255, 40, 40, 40),
-                              highlightColor:
-                                  const Color.fromARGB(255, 61, 61, 61),
-                              enabled: true,
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: ListView.separated(
-                                    itemBuilder: ((context, index) => Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(16)),
-                                          color: kSecondaryColor,
-                                          child: const SizedBox(
-                                            height: 400,
-                                            width: double.infinity,
-                                          ),
-                                        )),
-                                    separatorBuilder: ((context, index) =>
-                                        const SizedBox(height: 16)),
-                                    itemCount: 3),
-                              ))
-                          : _ListNewsWigdet(
-                              onLoading: () {},
-                              onRefresh: () async {
-                                await _getEvents();
-                                if (mounted) setState(() {});
-                                _refreshController.refreshFailed();
-                              },
-                              refreshController: _refreshController,
-                              news: _news,
-                            ),
-                    )),
-        ],
+    final themeModel = Provider.of<ThemeModel>(context);
+    return ScreenScaffold(
+      title: 'События',
+      body: Container(
+        color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
+        child: Column(
+          children: [
+            Container(
+                child: isError
+                    ? Center(
+                        child: Lottie.asset('assets/errorAnimation.json',
+                            fit: BoxFit.fill),
+                      )
+                    : Expanded(
+                        child: isLoading
+                            ? Shimmer.fromColors(
+                                baseColor:
+                                    const Color.fromARGB(255, 40, 40, 40),
+                                highlightColor:
+                                    const Color.fromARGB(255, 61, 61, 61),
+                                enabled: true,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: ListView.separated(
+                                      itemBuilder: ((context, index) => Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(16)),
+                                            color: themeModel.isDark
+                                                ? kSecondaryColorDark
+                                                : kSecondaryColorLight,
+                                            child: const SizedBox(
+                                              height: 400,
+                                              width: double.infinity,
+                                            ),
+                                          )),
+                                      separatorBuilder: ((context, index) =>
+                                          const SizedBox(height: 16)),
+                                      itemCount: 3),
+                                ))
+                            : _ListNewsWigdet(
+                                onLoading: () {},
+                                onRefresh: () async {
+                                  await _getEvents();
+                                  if (mounted) setState(() {});
+                                  _refreshController.refreshFailed();
+                                },
+                                refreshController: _refreshController,
+                                news: _news,
+                              ),
+                      )),
+          ],
+        ),
       ),
     );
   }
@@ -120,14 +128,15 @@ class _ListNewsWigdet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
     return SmartRefresher(
       controller: refreshController,
       footer: const ClassicFooter(
         loadStyle: LoadStyle.ShowWhenLoading,
         completeDuration: Duration(milliseconds: 500),
       ),
-      header: const WaterDropMaterialHeader(
-        color: kTextColor,
+      header: WaterDropMaterialHeader(
+        color: themeModel.isDark ? kTextColorDark : kTextColorLight,
         backgroundColor: kButtonColor,
       ),
       onRefresh: onRefresh,
@@ -197,59 +206,76 @@ class _AdminNewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
     return GestureDetector(
       onTap: () {
         _handleButtonPress(context);
       },
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        color: kSecondaryColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: color.toColor(),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Text(startTime, style: kTextH4),
-                      const Spacer(),
-                      Text(type, style: kTextH4),
-                    ],
-                  ),
-                  Text(
-                    title,
-                    style: kTextH1Bold,
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 300,
-              width: double.infinity,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16),
-                ),
-                child: ExtendedImage.network(
-                  '${kDebugMode ? debugHostUrl : releaseHostUrl}static/events/$fileName',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.black54,
+                offset: Offset(0, 3),
+                blurRadius: 5,
+                blurStyle: BlurStyle.normal)
           ],
+        ),
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          color: themeModel.isDark ? kSecondaryColorDark : kSecondaryColorLight,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: color.toColor(),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Text(startTime,
+                            style: Theme.of(context).textTheme.headline4),
+                        const Spacer(),
+                        Text(type,
+                            style: Theme.of(context).textTheme.headline4),
+                      ],
+                    ),
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.subtitle1,
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 300,
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                  child: ExtendedImage.network(
+                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/events/$fileName',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -278,53 +304,68 @@ class _SystemNewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
     return GestureDetector(
       onTap: () {
         _handleURLButtonPress(context, link, title);
       },
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        color: kSecondaryColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: color.toColor(),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(type, style: kTextH4),
-                  Text(
-                    title,
-                    style: kTextH1Bold,
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 300,
-              width: double.infinity,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16),
-                ),
-                child: ExtendedImage.network(
-                  fileName,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.black54,
+                offset: Offset(0, 3),
+                blurRadius: 5,
+                blurStyle: BlurStyle.normal)
           ],
+        ),
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          color: themeModel.isDark ? kSecondaryColorDark : kSecondaryColorLight,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: color.toColor(),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(type, style: Theme.of(context).textTheme.headline4),
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.subtitle1,
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 300,
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                  child: ExtendedImage.network(
+                    fileName,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -357,16 +398,17 @@ class _NewsDetailsScreen extends StatefulWidget {
 class __NewsDetailsScreenState extends State<_NewsDetailsScreen> {
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: widget.color.toColor(),
         title: Text(
           widget.title,
-          style: kTextH1Bold,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
       ),
       body: Container(
-        color: kPrimaryColor,
+        color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
         height: double.infinity,
         child: SingleChildScrollView(
           child: Container(
@@ -388,30 +430,30 @@ class __NewsDetailsScreenState extends State<_NewsDetailsScreen> {
                     ),
                   ),
                 ),
-                const Divider(
+                Divider(
                   height: 16,
-                  color: kTextColor,
+                  color: themeModel.isDark ? kTextColorDark : kTextColorLight,
                 ),
                 Row(
                   children: [
                     Text(
                       widget.startTime,
-                      style: kTextH3Bold,
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                     const Spacer(),
                     Text(
                       widget.type,
-                      style: kTextH3Bold,
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ],
                 ),
-                const Divider(
+                Divider(
                   thickness: 1,
-                  color: kTextColor,
+                  color: themeModel.isDark ? kTextColorDark : kTextColorLight,
                 ),
                 Text(
                   widget.description,
-                  style: kTextH2,
+                  style: Theme.of(context).textTheme.headline2,
                 ),
               ],
             ),

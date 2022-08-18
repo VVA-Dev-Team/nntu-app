@@ -1,7 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:nntu_app/constants.dart';
-import 'package:nntu_app/widgets/screen_hader.dart';
+import 'package:nntu_app/models/marks_model.dart';
+import 'package:nntu_app/screens/marks_screen.dart';
+import 'package:nntu_app/screens/settings_screen.dart';
+import 'package:nntu_app/theme/theme_manager.dart';
+import 'package:nntu_app/widgets/screen_scaffold.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Еще
@@ -16,95 +21,131 @@ class AdditionallyScreen extends StatefulWidget {
 class _AdditionallyScreenState extends State<AdditionallyScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: kPrimaryColor,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // ScreenHader(title: 'Ещё'),
-            Container(
-              // height: 280,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: kSecondaryColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+    final themeModel = Provider.of<ThemeModel>(context);
+    return ScreenScaffold(
+      title: '',
+      disableAppbar: true,
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                // height: 280,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Colors.black54,
+                        offset: Offset(0, 2),
+                        blurRadius: 3,
+                        blurStyle: BlurStyle.solid)
+                  ],
+                  color: themeModel.isDark
+                      ? kSecondaryColorDark
+                      : kSecondaryColorLight,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: const _LoginWidget(),
+              ),
+              Container(
+                margin: const EdgeInsets.all(15),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: themeModel.isDark
+                      ? kSecondaryColorDark
+                      : kSecondaryColorLight,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Colors.black54,
+                        offset: Offset(0, 2),
+                        blurRadius: 3,
+                        blurStyle: BlurStyle.solid)
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SettingsScreen()));
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.settings_outlined,
+                            color: themeModel.isDark
+                                ? kTextColorDark
+                                : kTextColorLight,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Настройки',
+                            style: Theme.of(context).textTheme.headline2,
+                          )
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      height: 20,
+                      thickness: 1,
+                      color:
+                          themeModel.isDark ? kTextColorDark : kTextColorLight,
+                    ),
+                    GestureDetector(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.search_outlined,
+                            color: themeModel.isDark
+                                ? kTextColorDark
+                                : kTextColorLight,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Поиск преподавателя',
+                            style: Theme.of(context).textTheme.headline2,
+                          )
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      height: 20,
+                      thickness: 1,
+                      color:
+                          themeModel.isDark ? kTextColorDark : kTextColorLight,
+                    ),
+                    GestureDetector(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.playlist_add_check_outlined,
+                            color: themeModel.isDark
+                                ? kTextColorDark
+                                : kTextColorLight,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Задачи',
+                            style: Theme.of(context).textTheme.headline2,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: _LoginWidget(),
-            ),
-            Container(
-              margin: EdgeInsets.all(15),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: kSecondaryColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.settings_outlined,
-                          color: kTextColor,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Настройки',
-                          style: kTextH2,
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(
-                    height: 20,
-                    thickness: 1,
-                    color: kTextColor,
-                  ),
-                  GestureDetector(
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.search_outlined,
-                          color: kTextColor,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Поиск преподавателя',
-                          style: kTextH2,
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(
-                    height: 20,
-                    thickness: 1,
-                    color: kTextColor,
-                  ),
-                  GestureDetector(
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.playlist_add_check_outlined,
-                          color: kTextColor,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Задачи',
-                          style: kTextH2,
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -130,12 +171,12 @@ class _LoginWidgetState extends State<_LoginWidget> {
 
   Future<void> removeUserData() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.remove('userName');
-    prefs.remove('userSername');
-    prefs.remove('userPatronymic');
-    prefs.remove('userGroup');
-    prefs.remove('userType');
-    prefs.remove('userKey');
+    await prefs.remove('userName');
+    await prefs.remove('userSername');
+    await prefs.remove('userPatronymic');
+    await prefs.remove('userGroup');
+    await prefs.remove('userType');
+    await prefs.remove('userKey');
     setState(() {});
   }
 
@@ -158,6 +199,7 @@ class _LoginWidgetState extends State<_LoginWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,19 +211,19 @@ class _LoginWidgetState extends State<_LoginWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AutoSizeText(
-                userName == '' ? 'Имя' : userName,
-                maxLines: 2,
-                style: kTextH1Bold,
-              ),
-              AutoSizeText(
                 userSername == '' ? 'Фамилия' : userSername,
                 maxLines: 2,
-                style: kTextH1Bold,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              AutoSizeText(
+                userName == '' ? 'Имя' : userName,
+                maxLines: 2,
+                style: Theme.of(context).textTheme.subtitle1,
               ),
               AutoSizeText(
                 userPatronymic == '' ? 'Отчество' : userPatronymic,
                 maxLines: 2,
-                style: kTextH1Bold,
+                style: Theme.of(context).textTheme.subtitle1,
               ),
             ],
           ),
@@ -196,11 +238,11 @@ class _LoginWidgetState extends State<_LoginWidget> {
                 children: [
                   AutoSizeText(
                     'Группа:',
-                    style: kTextH3,
+                    style: Theme.of(context).textTheme.headline3,
                   ),
                   AutoSizeText(
                     userGroup,
-                    style: kTextH2Bold,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                 ],
               ),
@@ -211,11 +253,11 @@ class _LoginWidgetState extends State<_LoginWidget> {
                 children: [
                   AutoSizeText(
                     '№ билета:',
-                    style: kTextH3,
+                    style: Theme.of(context).textTheme.headline3,
                   ),
                   AutoSizeText(
                     userKey,
-                    style: kTextH2Bold,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                 ],
               ),
@@ -231,8 +273,9 @@ class _LoginWidgetState extends State<_LoginWidget> {
                   removeUserData();
                 },
                 style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(kSecondaryColor)),
+                    backgroundColor: MaterialStateProperty.all(themeModel.isDark
+                        ? kSecondaryColorDark
+                        : kSecondaryColorLight)),
                 child: Row(
                   children: const [
                     Icon(
@@ -256,8 +299,9 @@ class _LoginWidgetState extends State<_LoginWidget> {
                       .then((_) => getUserData());
                 },
                 style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(kSecondaryColor)),
+                    backgroundColor: MaterialStateProperty.all(themeModel.isDark
+                        ? kSecondaryColorDark
+                        : kSecondaryColorLight)),
                 child: Row(
                   children: const [
                     Icon(
@@ -297,7 +341,7 @@ class _EditAlirtDialogState extends State<_EditAlirtDialog> {
 
   String userGroup = '';
 
-  String userType = '';
+  String userType = 'bak_spec';
 
   String userKey = '';
 
@@ -309,19 +353,19 @@ class _EditAlirtDialogState extends State<_EditAlirtDialog> {
     userSername = prefs.getString('userSername') ?? '';
     userPatronymic = prefs.getString('userPatronymic') ?? '';
     userGroup = prefs.getString('userGroup') ?? '';
-    userType = prefs.getString('userType') ?? '';
+    userType = prefs.getString('userType') ?? userType;
     userKey = prefs.getString('userKey') ?? '';
     setState(() {});
   }
 
   Future<void> saveUserData() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('userName', userName);
-    prefs.setString('userSername', userSername);
-    prefs.setString('userPatronymic', userPatronymic);
-    prefs.setString('userGroup', userGroup);
-    prefs.setString('userType', userType);
-    prefs.setString('userKey', userKey);
+    await prefs.setString('userName', userName);
+    await prefs.setString('userSername', userSername);
+    await prefs.setString('userPatronymic', userPatronymic);
+    await prefs.setString('userGroup', userGroup);
+    await prefs.setString('userType', userType);
+    await prefs.setString('userKey', userKey);
     Navigator.pop(context);
   }
 
@@ -333,11 +377,14 @@ class _EditAlirtDialogState extends State<_EditAlirtDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
+    final marksModel = Provider.of<MarksModel>(context, listen: false);
     return AlertDialog(
-      backgroundColor: kPrimaryColor,
+      backgroundColor:
+          themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
       title: Text(
         'Изменение данных',
-        style: kTextH2Bold,
+        style: Theme.of(context).textTheme.subtitle2,
       ),
       content: SingleChildScrollView(
         child: Container(
@@ -346,58 +393,75 @@ class _EditAlirtDialogState extends State<_EditAlirtDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _InputField(
-                  title: 'Имя',
-                  fieldText: 'имя',
-                  initValue: userName,
-                  onChanged: (text) {
-                    setState(() {
-                      userName = text;
-                    });
-                  }),
+                title: 'Фамилия',
+                fieldText: 'фимилию',
+                initValue: userSername,
+                onChanged: (text) {
+                  userSername = text;
+                },
+                onEditingComplete: () {
+                  setState(() {});
+                },
+              ),
               _InputField(
-                  title: 'Фамилия',
-                  fieldText: 'фимилию',
-                  initValue: userSername,
-                  onChanged: (text) {
-                    setState(() {
-                      userSername = text;
-                    });
-                  }),
+                title: 'Имя',
+                fieldText: 'имя',
+                initValue: userName,
+                onChanged: (text) {
+                  userName = text;
+                },
+                onEditingComplete: () {
+                  setState(() {});
+                },
+              ),
               _InputField(
-                  title: 'Отчество',
-                  fieldText: 'отчество',
-                  initValue: userPatronymic,
-                  onChanged: (text) {
-                    setState(() {
-                      userPatronymic = text;
-                    });
-                  }),
-              const Divider(color: kTextColor, thickness: 1),
+                title: 'Отчество',
+                fieldText: 'отчество',
+                initValue: userPatronymic,
+                onChanged: (text) {
+                  userPatronymic = text;
+                },
+                onEditingComplete: () {
+                  setState(() {});
+                },
+              ),
+              Divider(
+                  color: themeModel.isDark ? kTextColorDark : kTextColorLight,
+                  thickness: 1),
               _InputField(
-                  title: 'Группа',
-                  fieldText: 'группу',
-                  initValue: userGroup,
-                  onChanged: (text) {
-                    setState(() {
-                      userGroup = text;
-                    });
-                  }),
+                title: 'Группа',
+                fieldText: 'группу',
+                initValue: userGroup,
+                onChanged: (text) {
+                  userGroup = text;
+                },
+                onEditingComplete: () {
+                  setState(() {});
+                },
+              ),
               _InputField(
-                  title: 'Номер студенческого билета',
-                  fieldText: 'номер',
-                  initValue: userKey,
-                  onChanged: (text) {
-                    setState(() {
-                      userKey = text;
-                    });
-                  }),
-              const Divider(color: kTextColor, thickness: 1),
-              Text('Форма обучения', style: kTextH2Bold),
+                title: 'Номер студенческого билета',
+                fieldText: 'номер',
+                initValue: userKey,
+                onChanged: (text) {
+                  userKey = text;
+                },
+                onEditingComplete: () {
+                  setState(() {});
+                },
+              ),
+              Divider(
+                  color: themeModel.isDark ? kTextColorDark : kTextColorLight,
+                  thickness: 1),
+              Text('Форма обучения',
+                  style: Theme.of(context).textTheme.subtitle2),
               DropdownButton(
                   isExpanded: true,
                   value: value,
-                  style: kTextH3Bold,
-                  dropdownColor: kSecondaryColor,
+                  style: Theme.of(context).textTheme.bodyText1,
+                  dropdownColor: themeModel.isDark
+                      ? kSecondaryColorDark
+                      : kSecondaryColorLight,
                   items: const [
                     DropdownMenuItem(
                       value: 0,
@@ -428,16 +492,21 @@ class _EditAlirtDialogState extends State<_EditAlirtDialog> {
                     }
                     setState(() {});
                   }),
-              const Divider(thickness: 1, color: kTextColor),
+              Divider(
+                  thickness: 1,
+                  color: themeModel.isDark ? kTextColorDark : kTextColorLight),
               Align(
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   onPressed: () {
+                    marksModel.getMarks();
                     saveUserData();
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(kSecondaryColor)),
+                      backgroundColor: MaterialStateProperty.all(
+                          themeModel.isDark
+                              ? kSecondaryColorDark
+                              : kSecondaryColorLight)),
                   child: Row(
                     children: const [
                       Icon(
@@ -467,30 +536,34 @@ class _InputField extends StatelessWidget {
   final String title;
   final String initValue;
   final String fieldText;
+  final VoidCallback onEditingComplete;
   final ValueChanged onChanged;
   const _InputField(
       {Key? key,
       required this.title,
       required this.onChanged,
       this.initValue = '',
-      required this.fieldText})
+      required this.fieldText,
+      required this.onEditingComplete})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: kTextH2Bold),
+        Text(title, style: Theme.of(context).textTheme.subtitle2),
         TextField(
-          style: kTextH2,
           controller: TextEditingController(text: initValue),
+          style: Theme.of(context).textTheme.headline2,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(8),
             border: InputBorder.none,
             hintText: "Введите $fieldText",
-            hintStyle: kTextH3Bold,
-            fillColor: kSecondaryColor,
+            hintStyle: Theme.of(context).textTheme.bodyText1,
+            fillColor:
+                themeModel.isDark ? kSecondaryColorDark : kSecondaryColorLight,
             filled: true,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -499,7 +572,8 @@ class _InputField extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          onSubmitted: onChanged,
+          onChanged: onChanged,
+          onEditingComplete: onEditingComplete,
         ),
         const SizedBox(height: 4),
       ],
