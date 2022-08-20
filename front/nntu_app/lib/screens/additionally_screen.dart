@@ -2,8 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:nntu_app/constants.dart';
 import 'package:nntu_app/models/marks_model.dart';
-import 'package:nntu_app/screens/marks_screen.dart';
+import 'package:nntu_app/screens/about_us.dart';
 import 'package:nntu_app/screens/settings_screen.dart';
+import 'package:nntu_app/screens/tasks_screen.dart';
 import 'package:nntu_app/theme/theme_manager.dart';
 import 'package:nntu_app/widgets/screen_scaffold.dart';
 import 'package:provider/provider.dart';
@@ -125,6 +126,12 @@ class _AdditionallyScreenState extends State<AdditionallyScreen> {
                           themeModel.isDark ? kTextColorDark : kTextColorLight,
                     ),
                     GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const TasksScreen()));
+                      },
                       child: Row(
                         children: [
                           Icon(
@@ -136,6 +143,35 @@ class _AdditionallyScreenState extends State<AdditionallyScreen> {
                           SizedBox(width: 10),
                           Text(
                             'Задачи',
+                            style: Theme.of(context).textTheme.headline2,
+                          )
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      height: 20,
+                      thickness: 1,
+                      color:
+                          themeModel.isDark ? kTextColorDark : kTextColorLight,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AdoutUsScreen()));
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            color: themeModel.isDark
+                                ? kTextColorDark
+                                : kTextColorLight,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'О приложении',
                             style: Theme.of(context).textTheme.headline2,
                           )
                         ],
@@ -498,9 +534,9 @@ class _EditAlirtDialogState extends State<_EditAlirtDialog> {
               Align(
                 alignment: Alignment.center,
                 child: ElevatedButton(
-                  onPressed: () {
-                    marksModel.getMarks();
-                    saveUserData();
+                  onPressed: () async {
+                    await saveUserData();
+                    await marksModel.getMarks();
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(

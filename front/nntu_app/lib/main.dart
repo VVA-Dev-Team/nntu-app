@@ -7,8 +7,10 @@ import 'package:nntu_app/models/lessons_model.dart';
 import 'package:nntu_app/models/map_model.dart';
 import 'package:nntu_app/models/marks_model.dart';
 import 'package:nntu_app/models/navigation_model.dart';
+import 'package:nntu_app/models/tasks_model.dart';
 import 'package:nntu_app/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,15 +29,27 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MapModel()),
         ChangeNotifierProvider(create: (_) => MarksModel()),
         ChangeNotifierProvider(create: (_) => InitModel()),
+        ChangeNotifierProvider(create: (_) => TasksModel()),
       ],
       child: Consumer<ThemeModel>(
         builder: (context, ThemeModel themeNotifier, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('ru')],
             title: 'НГТУ',
             theme: themeNotifier.isDark
                 ? ThemeData.dark().copyWith(
                     primaryColor: kButtonColor,
+                    colorScheme: ColorScheme.fromSwatch()
+                        .copyWith(secondary: kButtonColor),
+                    floatingActionButtonTheme:
+                        const FloatingActionButtonThemeData(
+                            backgroundColor: kButtonColor),
                     appBarTheme: const AppBarTheme(
                       backgroundColor: kAppBarBackgroundColorDark,
                       iconTheme: IconThemeData(color: kButtonColor),
@@ -83,6 +97,8 @@ class MyApp extends StatelessWidget {
                   )
                 : ThemeData.light().copyWith(
                     primaryColor: kButtonColor,
+                    colorScheme: ColorScheme.fromSwatch()
+                        .copyWith(secondary: kButtonColor),
                     appBarTheme: const AppBarTheme(
                       backgroundColor: kAppBarBackgroundColorLight,
                       iconTheme: IconThemeData(color: kButtonColor),
@@ -109,19 +125,19 @@ class MyApp extends StatelessWidget {
                         color: kTextColorLight,
                       ),
                       subtitle1: GoogleFonts.getFont(
-                        'Exo 2',
+                        'Roboto',
                         fontSize: 24,
                         color: kTextColorLight,
                         fontWeight: FontWeight.bold,
                       ),
                       subtitle2: GoogleFonts.getFont(
-                        'Exo 2',
+                        'Roboto',
                         fontSize: 21,
                         color: kTextColorLight,
                         fontWeight: FontWeight.bold,
                       ),
                       bodyText1: GoogleFonts.getFont(
-                        'Exo 2',
+                        'Roboto',
                         fontSize: 18,
                         color: kTextColorLight,
                         fontWeight: FontWeight.bold,

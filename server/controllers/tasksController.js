@@ -5,7 +5,7 @@ const {Tasks} = require('../models/models')
 class TasksController {
     async getTask(req, res, next) {
         try {
-            const {group} = req.body
+            const {group} = req.query
             const tasks = await Tasks.findAll({where: {group}})
             return res.json(tasks)
         } catch (e) {
@@ -77,7 +77,7 @@ class TasksController {
 
     async deleteTask(req, res, next) {
         try {
-            const {id} = req.body
+            const {id} = req.query
             const tasks = await Tasks.destroy({
                 where: {
                     id

@@ -7,6 +7,7 @@ import 'package:nntu_app/theme/theme_manager.dart';
 import 'package:nntu_app/widgets/screen_scaffold.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:shimmer/shimmer.dart';
 
 // Оценки
 
@@ -40,87 +41,112 @@ class MarksScreen extends StatelessWidget {
       body: Consumer<MarksModel>(
         builder: (context, value, child) => Container(
           color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
-          child: marksModel.isLoading
-              ? Container(
-                  color: themeModel.isDark
-                      ? kPrimaryColorDark
-                      : kPrimaryColorLight,
-                  child: const Center(
-                    child: CircularProgressIndicator.adaptive(),
+          child: marksModel.initLoading
+              ? Shimmer.fromColors(
+                  baseColor: const Color.fromARGB(255, 40, 40, 40),
+                  highlightColor: const Color.fromARGB(255, 61, 61, 61),
+                  enabled: true,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 16),
+                          Container(
+                            width: 170,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(16)),
+                          ),
+                          const SizedBox(height: 16),
+                          Container(
+                            width: double.infinity,
+                            height: 800,
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(16)),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 )
-              : marksModel.isError
-                  ? Center(
-                      child: Text(
-                        marksModel.errorMessage,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.subtitle2,
-                      ),
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 16),
-                            child: AnimatedToggleSwitch<int>.size(
-                              indicatorColor: kButtonColor,
-                              innerColor: themeModel.isDark
-                                  ? kSecondaryColorDark
-                                  : kSecondaryColorLight,
-                              current: marksModel.selectedSemester,
-                              values: List.generate(marksModel.semestersCount,
-                                  (index) => index + 1),
-                              iconOpacity: 0.2,
-                              borderColor: themeModel.isDark
-                                  ? kPrimaryColorDark
-                                  : kPrimaryColorLight,
-                              borderRadius: BorderRadius.circular(20.0),
-                              iconBuilder: (value, size) {
-                                return Center(
-                                  child: Text(
-                                    value.toString(),
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.headline2,
-                                  ),
-                                );
-                              },
-                              // indicatorSize: Size.fromWidth(100),
-                              onChanged: (i) => marksModel.setSemester(i),
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    marksModel.isError
+                        ? Center(
+                            child: Text(
+                              marksModel.errorMessage,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                          )
+                        : Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 16),
+                              child: AnimatedToggleSwitch<int>.size(
+                                indicatorColor: kButtonColor,
+                                innerColor: themeModel.isDark
+                                    ? kSecondaryColorDark
+                                    : kSecondaryColorLight,
+                                current: marksModel.selectedSemester,
+                                values: List.generate(marksModel.semestersCount,
+                                    (index) => index + 1),
+                                iconOpacity: 0.2,
+                                borderColor: themeModel.isDark
+                                    ? kPrimaryColorDark
+                                    : kPrimaryColorLight,
+                                borderRadius: BorderRadius.circular(20.0),
+                                iconBuilder: (value, size) {
+                                  return Center(
+                                    child: Text(
+                                      value.toString(),
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          Theme.of(context).textTheme.headline2,
+                                    ),
+                                  );
+                                },
+                                // indicatorSize: Size.fromWidth(100),
+                                onChanged: (i) => marksModel.setSemester(i),
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 24),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            '${marksModel.selectedSemester} семестр',
-                            style: Theme.of(context).textTheme.headline4,
+                    const SizedBox(height: 24),
+                    marksModel.isError
+                        ? Container()
+                        : Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              '${marksModel.selectedSemester} семестр',
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Expanded(
-                          child: _ListLessonsWigdet(
-                            refreshController: _refreshController,
-                            marks: marksModel.marks,
-                            selectedSemester: marksModel.selectedSemester,
-                            onRefresh: () async {
-                              await marksModel.getMarks();
-                              _refreshController.refreshFailed();
-                            },
-                            onLoading: () async {
-                              await Future.delayed(
-                                const Duration(milliseconds: 180),
-                              );
-                              _refreshController.refreshFailed();
-                            },
-                          ),
-                        )
-                      ],
-                    ),
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: _ListLessonsWigdet(
+                        refreshController: _refreshController,
+                        marks: marksModel.marks,
+                        selectedSemester: marksModel.selectedSemester,
+                        onRefresh: () async {
+                          await marksModel.getMarks();
+                          _refreshController.refreshFailed();
+                        },
+                        onLoading: () async {
+                          await Future.delayed(
+                            const Duration(milliseconds: 180),
+                          );
+                          _refreshController.refreshFailed();
+                        },
+                      ),
+                    )
+                  ],
+                ),
         ),
       ),
     );
@@ -469,7 +495,9 @@ class _ListLessonsWigdet extends StatelessWidget {
                   ),
                 ),
               )),
-          itemCount: marks.semesters[selectedSemester - 1].marks.length,
+          itemCount: marks.semesters.isEmpty
+              ? 0
+              : marks.semesters[selectedSemester - 1].marks.length,
         ),
       ),
     );

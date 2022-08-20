@@ -29,6 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   convex_bottom_bar: ^3.0.0
   google_fonts: ^3.0.1
   auto_size_text: ^3.0.0
@@ -44,6 +46,8 @@ dependencies:
   intl: ^0.17.0
   flutter_native_splash: ^2.2.7
   permission_handler: ^10.0.0
+  url_launcher: ^6.1.5
+  flutter_slidable: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.

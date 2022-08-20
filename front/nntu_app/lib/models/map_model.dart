@@ -11,7 +11,7 @@ class MapModel extends ChangeNotifier {
   int get building => _building;
 
   // отображать выбор этажей или корпусов
-  int _typeMenuItem = 0;
+  int _typeMenuItem = 1;
   int get typeMenuItem => _typeMenuItem;
 
   final _buildings = [1, 2, 3, 4, 5, 6];
@@ -30,7 +30,15 @@ class MapModel extends ChangeNotifier {
     return _buildingFloors[i - 1];
   }
 
-  void setTypeMenuItem(int i) {
+  void setTypeMenuItem(int i) async {
+    if (_building == 5) {
+      _building = 4;
+      notifyListeners();
+      await Future.delayed(
+        const Duration(milliseconds: 80),
+      );
+      _building = 5;
+    }
     _floor = 1;
     _typeMenuItem = i;
     searchImage(false);

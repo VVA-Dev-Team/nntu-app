@@ -9,13 +9,17 @@ class ScreenScaffold extends StatelessWidget {
   final String title;
   final Widget body;
   final List<Widget>? actions;
+  final Widget? floatingActionButton;
   final bool disableAppbar;
+  final bool disableNavbar;
   const ScreenScaffold(
       {Key? key,
       required this.body,
       required this.title,
       this.actions,
-      this.disableAppbar = false})
+      this.disableAppbar = false,
+      this.disableNavbar = false,
+      this.floatingActionButton})
       : super(key: key);
 
   @override
@@ -23,6 +27,7 @@ class ScreenScaffold extends StatelessWidget {
     final themeModel = Provider.of<ThemeModel>(context);
     final navigationModel = Provider.of<NavigationModel>(context);
     return Scaffold(
+      floatingActionButton: floatingActionButton,
       appBar: !disableAppbar
           ? AppBar(
               title: Text(
@@ -35,34 +40,41 @@ class ScreenScaffold extends StatelessWidget {
                 ),
               ),
               actions: actions,
+              iconTheme: const IconThemeData(
+                color: Colors.white, //change your color here
+              ),
             )
           : null,
       body: body,
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor:
-            themeModel.isDark ? kSecondaryColorDark : kSecondaryColorLight,
-        currentIndex: navigationModel.selectedPage,
-        selectedItemColor: kButtonColor,
-        unselectedItemColor:
-            themeModel.isDark ? kTextColorDark : kTextColorLight,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-        selectedFontSize: 12,
-        onTap: (index) {
-          navigationModel.changePage(index);
-        },
-        items: navigationModel
-            .getPages()
-            .map(
-              (e) => BottomNavigationBarItem(
-                  icon: Icon(e.icon),
-                  label: e.name,
-                  backgroundColor: themeModel.isDark
-                      ? kSecondaryColorDark
-                      : kSecondaryColorLight),
+      bottomNavigationBar: !disableNavbar
+          ? BottomNavigationBar(
+              backgroundColor: themeModel.isDark
+                  ? kSecondaryColorDark
+                  : kSecondaryColorLight,
+              currentIndex: navigationModel.selectedPage,
+              selectedItemColor: kButtonColor,
+              unselectedItemColor: themeModel.isDark
+                  ? kTextColorDark
+                  : Color.fromARGB(255, 90, 90, 90),
+              showUnselectedLabels: true,
+              type: BottomNavigationBarType.fixed,
+              selectedFontSize: 12,
+              onTap: (index) {
+                navigationModel.changePage(index);
+              },
+              items: navigationModel
+                  .getPages()
+                  .map(
+                    (e) => BottomNavigationBarItem(
+                        icon: Icon(e.icon),
+                        label: e.name,
+                        backgroundColor: themeModel.isDark
+                            ? kSecondaryColorDark
+                            : kSecondaryColorLight),
+                  )
+                  .toList(),
             )
-            .toList(),
-      ),
+          : null,
     );
   }
 }

@@ -11,8 +11,6 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 // Расписание занятий
 
 class LessonsScreen extends StatelessWidget {
-  // late DateTime selectedDate;
-
   final RefreshController _refreshController = RefreshController(
       initialRefresh: false, initialLoadStatus: LoadStatus.loading);
 
@@ -27,9 +25,9 @@ class LessonsScreen extends StatelessWidget {
           onTap: () async {
             await schedule.selectDate(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.calendar_month,
-            color: themeModel.isDark ? kTextColorDark : kTextColorLight,
+            color: kTextColorDark,
             size: 28,
           ),
         ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nntu_app/constants.dart';
 import 'package:nntu_app/theme/theme_manager.dart';
+import 'package:nntu_app/widgets/screen_scaffold.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -31,15 +32,8 @@ class WebViewPageState extends State<WebViewPage> {
   @override
   Widget build(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor:
-            themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.subtitle1,
-        ),
-      ),
+    return ScreenScaffold(
+      title: title,
       body: Column(
         children: [
           Expanded(

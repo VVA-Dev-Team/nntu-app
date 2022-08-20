@@ -399,63 +399,65 @@ class __NewsDetailsScreenState extends State<_NewsDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: widget.color.toColor(),
-        title: Text(
-          widget.title,
-          style: Theme.of(context).textTheme.subtitle1,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: widget.color.toColor(),
+          title: Text(
+            widget.title,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
         ),
-      ),
-      body: Container(
-        color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 300,
-                  width: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(16),
-                      bottomRight: Radius.circular(16),
-                    ),
-                    child: ExtendedImage.network(
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/events/${widget.fileName}',
-                      fit: BoxFit.cover,
+        body: Container(
+          color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 300,
+                    width: double.infinity,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(16),
+                        bottomRight: Radius.circular(16),
+                      ),
+                      child: ExtendedImage.network(
+                        '${kDebugMode ? debugHostUrl : releaseHostUrl}static/events/${widget.fileName}',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Divider(
-                  height: 16,
-                  color: themeModel.isDark ? kTextColorDark : kTextColorLight,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      widget.startTime,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    const Spacer(),
-                    Text(
-                      widget.type,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ],
-                ),
-                Divider(
-                  thickness: 1,
-                  color: themeModel.isDark ? kTextColorDark : kTextColorLight,
-                ),
-                Text(
-                  widget.description,
-                  style: Theme.of(context).textTheme.headline2,
-                ),
-              ],
+                  Divider(
+                    height: 16,
+                    color: themeModel.isDark ? kTextColorDark : kTextColorLight,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        widget.startTime,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      const Spacer(),
+                      Text(
+                        widget.type,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    thickness: 1,
+                    color: themeModel.isDark ? kTextColorDark : kTextColorLight,
+                  ),
+                  Text(
+                    widget.description,
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
