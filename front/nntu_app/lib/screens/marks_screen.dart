@@ -24,11 +24,8 @@ class MarksScreen extends StatelessWidget {
       actions: [
         GestureDetector(
           onTap: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const _AlertStatWidget();
-                });
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const _StatScreen()));
           },
           child: const Icon(
             Icons.assessment_outlined,
@@ -153,8 +150,8 @@ class MarksScreen extends StatelessWidget {
   }
 }
 
-class _AlertStatWidget extends StatelessWidget {
-  const _AlertStatWidget({
+class _StatScreen extends StatelessWidget {
+  const _StatScreen({
     Key? key,
   }) : super(key: key);
 
@@ -172,26 +169,16 @@ class _AlertStatWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context);
     final marksModel = Provider.of<MarksModel>(context);
-    return AlertDialog(
-      backgroundColor:
-          themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
-      title: Column(
-        children: [
-          Text(
-            'Средний балл',
-            style: Theme.of(context).textTheme.subtitle2,
-          ),
-          Divider(
-            color: themeModel.isDark ? kTextColorDark : kTextColorLight,
-          ),
-        ],
-      ),
-      content: Container(
-        width: double.maxFinite,
+    return ScreenScaffold(
+      disableNavbar: true,
+      title: 'Средний балл',
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 16),
               Text(
                 'Общий',
                 style: Theme.of(context).textTheme.headline4,
@@ -346,7 +333,8 @@ class _ListLessonsWigdet extends StatelessWidget {
         ),
         header: WaterDropMaterialHeader(
           color: themeModel.isDark ? kTextColorDark : kTextColorLight,
-          backgroundColor: kButtonColor,
+          backgroundColor:
+              themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
         ),
         onRefresh: onRefresh,
         onLoading: onLoading,
@@ -363,99 +351,15 @@ class _ListLessonsWigdet extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 3),
                 child: GestureDetector(
                   onTap: (() {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: themeModel.isDark
-                                ? kPrimaryColorDark
-                                : kPrimaryColorLight,
-                            title: Text(
-                              marks.semesters[selectedSemester - 1].marks[index]
-                                  .predmet,
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      '1 кн: ${marks.semesters[selectedSemester - 1].marks[index].kn1.mark}',
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      '${marks.semesters[selectedSemester - 1].marks[index].kn1.leave} пропущено',
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '2 кн: ${marks.semesters[selectedSemester - 1].marks[index].kn2.mark}',
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      '${marks.semesters[selectedSemester - 1].marks[index].kn2.leave} пропущено',
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${marks.semesters[selectedSemester - 1].marks[index].typeOfAttestation}: ',
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
-                                    ),
-                                    marks
-                                                .semesters[selectedSemester - 1]
-                                                .marks[index]
-                                                .typeOfAttestation ==
-                                            'зачет'
-                                        ? Text(
-                                            marks
-                                                .semesters[selectedSemester - 1]
-                                                .marks[index]
-                                                .session,
-                                            style: GoogleFonts.getFont('Exo 2',
-                                                fontSize: 18,
-                                                color: marks
-                                                            .semesters[
-                                                                selectedSemester -
-                                                                    1]
-                                                            .marks[index]
-                                                            .session ==
-                                                        'зачёт'
-                                                    ? Colors.greenAccent
-                                                    : Colors.redAccent,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        : Text(
-                                            marks
-                                                .semesters[selectedSemester - 1]
-                                                .marks[index]
-                                                .session,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
-                                          )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => _LessonInfoScreen(
+                            marks: marks,
+                            selectedSemester: selectedSemester,
+                            index: index,
+                          ),
+                        ));
                   }),
                   child: Row(
                     children: [
@@ -499,6 +403,143 @@ class _ListLessonsWigdet extends StatelessWidget {
               ? 0
               : marks.semesters[selectedSemester - 1].marks.length,
         ),
+      ),
+    );
+  }
+}
+
+class _LessonInfoScreen extends StatelessWidget {
+  const _LessonInfoScreen({
+    Key? key,
+    required this.marks,
+    required this.selectedSemester,
+    required this.index,
+  }) : super(key: key);
+
+  final int index;
+  final MarksData marks;
+  final int selectedSemester;
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenScaffold(
+      disableNavbar: true,
+      title: '',
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            marks.semesters[selectedSemester - 1].marks[index].predmet,
+            style: Theme.of(context).textTheme.subtitle1,
+            textAlign: TextAlign.center,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                '${marks.semesters[selectedSemester - 1].marks[index].typeOfAttestation}: ',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              marks.semesters[selectedSemester - 1].marks[index]
+                          .typeOfAttestation ==
+                      'зачет'
+                  ? Text(
+                      marks
+                          .semesters[selectedSemester - 1].marks[index].session,
+                      style: GoogleFonts.getFont('Exo 2',
+                          fontSize: 18,
+                          color: marks.semesters[selectedSemester - 1]
+                                      .marks[index].session ==
+                                  'зачёт'
+                              ? Colors.greenAccent
+                              : Colors.redAccent,
+                          fontWeight: FontWeight.bold),
+                    )
+                  : Text(
+                      marks
+                          .semesters[selectedSemester - 1].marks[index].session,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    )
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '1 кн',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                  Text(
+                    marks.semesters[selectedSemester - 1].marks[index].kn1.mark,
+                    style: GoogleFonts.getFont(
+                      'Roboto',
+                      fontSize: 36,
+                      color: kTextColorDark,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    marks
+                        .semesters[selectedSemester - 1].marks[index].kn1.leave,
+                    style: GoogleFonts.getFont(
+                      'Roboto',
+                      fontSize: 36,
+                      color: kTextColorDark,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'пропусков',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '2 кн',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                  Text(
+                    marks.semesters[selectedSemester - 1].marks[index].kn2.mark,
+                    style: GoogleFonts.getFont(
+                      'Roboto',
+                      fontSize: 36,
+                      color: kTextColorDark,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    marks
+                        .semesters[selectedSemester - 1].marks[index].kn2.leave,
+                    style: GoogleFonts.getFont(
+                      'Roboto',
+                      fontSize: 36,
+                      color: kTextColorDark,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'пропусков',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

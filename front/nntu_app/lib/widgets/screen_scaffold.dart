@@ -27,6 +27,8 @@ class ScreenScaffold extends StatelessWidget {
     final themeModel = Provider.of<ThemeModel>(context);
     final navigationModel = Provider.of<NavigationModel>(context);
     return Scaffold(
+      backgroundColor:
+          themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
       floatingActionButton: floatingActionButton,
       resizeToAvoidBottomInset: false,
       appBar: !disableAppbar

@@ -1,7 +1,6 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:intl/intl.dart';
 import 'package:nntu_app/constants.dart';
 import 'package:nntu_app/models/tasks_model.dart';
 import 'package:nntu_app/theme/theme_manager.dart';
