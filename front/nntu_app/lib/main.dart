@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nntu_app/app.dart';
 import 'package:nntu_app/constants.dart';
+import 'package:nntu_app/models/additionally_controller.dart';
 import 'package:nntu_app/models/init_model.dart';
 import 'package:nntu_app/models/lessons_model.dart';
 import 'package:nntu_app/models/map_model.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MarksModel()),
         ChangeNotifierProvider(create: (_) => InitModel()),
         ChangeNotifierProvider(create: (_) => TasksModel()),
+        ChangeNotifierProvider(create: (_) => AdditionallyModel()),
       ],
       child: Consumer<ThemeModel>(
         builder: (context, ThemeModel themeNotifier, child) {
@@ -76,19 +78,19 @@ class MyApp extends StatelessWidget {
                         color: kTextColorDark,
                       ),
                       subtitle1: GoogleFonts.getFont(
-                        'Exo 2',
+                        'Roboto',
                         fontSize: 24,
                         color: kTextColorDark,
                         fontWeight: FontWeight.bold,
                       ),
                       subtitle2: GoogleFonts.getFont(
-                        'Exo 2',
+                        'Roboto',
                         fontSize: 21,
                         color: kTextColorDark,
                         fontWeight: FontWeight.bold,
                       ),
                       bodyText1: GoogleFonts.getFont(
-                        'Exo 2',
+                        'Roboto',
                         fontSize: 18,
                         color: kTextColorDark,
                         fontWeight: FontWeight.bold,

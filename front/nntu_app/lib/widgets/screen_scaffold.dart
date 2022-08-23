@@ -28,6 +28,7 @@ class ScreenScaffold extends StatelessWidget {
     final navigationModel = Provider.of<NavigationModel>(context);
     return Scaffold(
       floatingActionButton: floatingActionButton,
+      resizeToAvoidBottomInset: false,
       appBar: !disableAppbar
           ? AppBar(
               title: Text(

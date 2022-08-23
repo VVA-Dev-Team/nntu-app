@@ -37,10 +37,21 @@ class ScheduleController {
         try {
             const {
                 schedule,
+                deleted_schedule,
                 group_password,
             } = req.body
             let resSchedule = []
             if (group_password == '123') {
+                if (deleted_schedule) {
+                    for (let i = 0; i < deleted_schedule.length; i ++) {
+                        let id = deleted_schedule[i]
+                        await Schedule.destroy({
+                            where: {
+                                id
+                            }
+                        })
+                    }
+                }
                 for (let i = 0; i < schedule.length; i++) {
                     for (let j = 0; j < schedule[i].length; j++) {
                         const id = schedule[i][j]['id']
@@ -89,6 +100,7 @@ class ScheduleController {
             } = req.body
             let resSchedule = []
             if (group_password == '123') {
+
                 for (let i = 0; i < schedule.length; i++) {
                     for (let j = 0; j < schedule[i].length; j++) {
                         const group = schedule[i][j]['group']

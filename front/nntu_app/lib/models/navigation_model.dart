@@ -35,7 +35,7 @@ class NavigationModel extends ChangeNotifier {
       name: "Расписание",
     ),
     PagesClass(
-      child: const AdditionallyScreen(),
+      child: AdditionallyScreen(),
       icon: Icons.more_horiz_outlined,
       name: "Еще",
     ),
