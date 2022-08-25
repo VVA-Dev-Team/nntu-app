@@ -15,6 +15,8 @@ class MarksScreen extends StatelessWidget {
   final RefreshController _refreshController = RefreshController(
       initialRefresh: false, initialLoadStatus: LoadStatus.loading);
 
+  MarksScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context);
@@ -27,9 +29,9 @@ class MarksScreen extends StatelessWidget {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const _StatScreen()));
           },
-          child: const Icon(
+          child: Icon(
             Icons.assessment_outlined,
-            color: kTextColorDark,
+            color: themeModel.isDark ? kTextColorDark : kTextColorLight,
             size: 28,
           ),
         ),
@@ -98,7 +100,7 @@ class MarksScreen extends StatelessWidget {
                                 borderColor: themeModel.isDark
                                     ? kPrimaryColorDark
                                     : kPrimaryColorLight,
-                                borderRadius: BorderRadius.circular(20.0),
+                                borderRadius: BorderRadius.circular(10.0),
                                 iconBuilder: (value, size) {
                                   return Center(
                                     child: Text(
@@ -307,7 +309,7 @@ class _ListLessonsWigdet extends StatelessWidget {
   final MarksData marks;
   final int selectedSemester;
 
-  _ListLessonsWigdet({
+  const _ListLessonsWigdet({
     required this.onLoading,
     required this.onRefresh,
     required this.refreshController,
@@ -361,41 +363,43 @@ class _ListLessonsWigdet extends StatelessWidget {
                           ),
                         ));
                   }),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          child: Text(
-                            marks.semesters[selectedSemester - 1].marks[index]
-                                .predmet,
-                            // maxLines: 2,
-                            style: Theme.of(context).textTheme.subtitle2,
+                  child: SizedBox(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            child: Text(
+                              marks.semesters[selectedSemester - 1].marks[index]
+                                  .predmet,
+                              // maxLines: 2,
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              marks.semesters[selectedSemester - 1].marks[index]
-                                  .typeOfAttestation,
-                              style: Theme.of(context).textTheme.headline4,
-                              textAlign: TextAlign.right,
-                            ),
-                            Text(
-                              marks.semesters[selectedSemester - 1].marks[index]
-                                  .session,
-                              style: Theme.of(context).textTheme.subtitle2,
-                              textAlign: TextAlign.right,
-                            )
-                          ],
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                marks.semesters[selectedSemester - 1]
+                                    .marks[index].typeOfAttestation,
+                                style: Theme.of(context).textTheme.headline4,
+                                textAlign: TextAlign.right,
+                              ),
+                              Text(
+                                marks.semesters[selectedSemester - 1]
+                                    .marks[index].session,
+                                style: Theme.of(context).textTheme.subtitle2,
+                                textAlign: TextAlign.right,
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               )),
@@ -422,6 +426,7 @@ class _LessonInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
     return ScreenScaffold(
       disableNavbar: true,
       title: '',
@@ -482,7 +487,8 @@ class _LessonInfoScreen extends StatelessWidget {
                     style: GoogleFonts.getFont(
                       'Roboto',
                       fontSize: 36,
-                      color: kTextColorDark,
+                      color:
+                          themeModel.isDark ? kTextColorDark : kTextColorLight,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -493,7 +499,8 @@ class _LessonInfoScreen extends StatelessWidget {
                     style: GoogleFonts.getFont(
                       'Roboto',
                       fontSize: 36,
-                      color: kTextColorDark,
+                      color:
+                          themeModel.isDark ? kTextColorDark : kTextColorLight,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -516,7 +523,8 @@ class _LessonInfoScreen extends StatelessWidget {
                     style: GoogleFonts.getFont(
                       'Roboto',
                       fontSize: 36,
-                      color: kTextColorDark,
+                      color:
+                          themeModel.isDark ? kTextColorDark : kTextColorLight,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -527,7 +535,8 @@ class _LessonInfoScreen extends StatelessWidget {
                     style: GoogleFonts.getFont(
                       'Roboto',
                       fontSize: 36,
-                      color: kTextColorDark,
+                      color:
+                          themeModel.isDark ? kTextColorDark : kTextColorLight,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

@@ -18,11 +18,7 @@ class _AppState extends State<App> {
     final initModel = Provider.of<InitModel>(context);
     return Consumer<InitModel>(
       builder: (context, value, child) => initModel.inited
-          ? SafeArea(
-              child: navigationModel
-                  .getPages()[navigationModel.selectedPage]
-                  .child,
-            )
+          ? navigationModel.getPages()[navigationModel.selectedPage].child
           : SafeArea(
               child: Scaffold(
                 body: Container(

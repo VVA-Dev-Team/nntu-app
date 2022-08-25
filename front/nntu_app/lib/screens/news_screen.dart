@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:nntu_app/constants.dart';
 import 'package:nntu_app/models/http_controller.dart';
@@ -137,11 +138,13 @@ class _ListNewsWigdet extends StatelessWidget {
       ),
       header: WaterDropMaterialHeader(
         color: themeModel.isDark ? kTextColorDark : kTextColorLight,
-        backgroundColor: kButtonColor,
+        backgroundColor:
+            themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
       ),
       onRefresh: onRefresh,
       onLoading: onLoading,
       child: ListView.separated(
+        
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         separatorBuilder: ((context, index) => const SizedBox(height: 16)),
@@ -212,13 +215,14 @@ class _AdminNewsCard extends StatelessWidget {
         _handleButtonPress(context);
       },
       child: Container(
+        margin: const EdgeInsets.only(top: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
             BoxShadow(
-                color: Colors.black54,
+                color: Color.fromARGB(23, 0, 0, 0),
                 offset: Offset(0, 3),
-                blurRadius: 5,
+                blurRadius: 6,
                 blurStyle: BlurStyle.normal)
           ],
         ),
@@ -237,8 +241,8 @@ class _AdminNewsCard extends StatelessWidget {
                     topRight: Radius.circular(16),
                   ),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.only(
+                    right: 16, left: 16, top: 16, bottom: 16),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,16 +250,40 @@ class _AdminNewsCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(startTime,
-                            style: Theme.of(context).textTheme.headline4),
+                        Text(
+                          startTime.toUpperCase(),
+                          style: GoogleFonts.getFont(
+                            'Roboto',
+                            fontSize: 14,
+                            color: color.toColor().computeLuminance() > 0.5
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                        ),
                         const Spacer(),
-                        Text(type,
-                            style: Theme.of(context).textTheme.headline4),
+                        Text(
+                          type.toUpperCase(),
+                          style: GoogleFonts.getFont(
+                            'Roboto',
+                            fontSize: 14,
+                            color: color.toColor().computeLuminance() > 0.5
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                        ),
                       ],
                     ),
+                    const SizedBox(height: 7),
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: GoogleFonts.getFont(
+                        'Roboto',
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: color.toColor().computeLuminance() > 0.5
+                            ? Colors.black
+                            : Colors.white,
+                      ),
                     )
                   ],
                 ),
@@ -335,17 +363,34 @@ class _SystemNewsCard extends StatelessWidget {
                     topRight: Radius.circular(16),
                   ),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.only(
+                    right: 16, left: 16, top: 16, bottom: 16),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(type, style: Theme.of(context).textTheme.headline4),
+                    Text(
+                      type.toUpperCase(),
+                      style: GoogleFonts.getFont(
+                        'Roboto',
+                        fontSize: 14,
+                        color: color.toColor().computeLuminance() > 0.5
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 7),
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: GoogleFonts.getFont(
+                        'Roboto',
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: color.toColor().computeLuminance() > 0.5
+                            ? Colors.black
+                            : Colors.white,
+                      ),
                     )
                   ],
                 ),
@@ -399,65 +444,58 @@ class __NewsDetailsScreenState extends State<_NewsDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context);
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: widget.color.toColor(),
-          title: Text(
-            widget.title,
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-        ),
-        body: Container(
-          color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
-          height: double.infinity,
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 300,
-                    width: double.infinity,
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(16),
-                        bottomRight: Radius.circular(16),
-                      ),
-                      child: ExtendedImage.network(
-                        '${kDebugMode ? debugHostUrl : releaseHostUrl}static/events/${widget.fileName}',
-                        fit: BoxFit.cover,
-                      ),
+    return ScreenScaffold(
+      disableNavbar: true,
+      title: widget.title,
+      body: Container(
+        color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 300,
+                  width: double.infinity,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(16),
+                      bottomRight: Radius.circular(16),
+                    ),
+                    child: ExtendedImage.network(
+                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/events/${widget.fileName}',
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  Divider(
-                    height: 16,
-                    color: themeModel.isDark ? kTextColorDark : kTextColorLight,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        widget.startTime,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      const Spacer(),
-                      Text(
-                        widget.type,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ],
-                  ),
-                  Divider(
-                    thickness: 1,
-                    color: themeModel.isDark ? kTextColorDark : kTextColorLight,
-                  ),
-                  Text(
-                    widget.description,
-                    style: Theme.of(context).textTheme.headline2,
-                  ),
-                ],
-              ),
+                ),
+                Divider(
+                  height: 16,
+                  color: themeModel.isDark ? kTextColorDark : kTextColorLight,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      widget.startTime,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    const Spacer(),
+                    Text(
+                      widget.type,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+                Divider(
+                  thickness: 1,
+                  color: themeModel.isDark ? kTextColorDark : kTextColorLight,
+                ),
+                Text(
+                  widget.description,
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+              ],
             ),
           ),
         ),

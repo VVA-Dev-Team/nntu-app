@@ -29,7 +29,7 @@ class ScheduleController {
         } catch (e) {
             console.log(e)
             // return next(ApiError.bedRequest('Не заданы параметры'))
-            return next(ApiError.bedRequest(e))
+            return next(ApiError.badRequest(e))
         }
     }
 
@@ -88,7 +88,7 @@ class ScheduleController {
         } catch (e) {
             console.log(e)
             // return next(ApiError.bedRequest('Не заданы параметры'))
-            return next(ApiError.bedRequest(e))
+            return next(ApiError.internal(e))
         }
     }
 
@@ -136,7 +136,7 @@ class ScheduleController {
         } catch (e) {
             console.log(e)
             // return next(ApiError.bedRequest('Не заданы параметры'))
-            return next(ApiError.bedRequest(e))
+            return next(ApiError.internal(e))
         }
     }
 
@@ -159,7 +159,7 @@ class ScheduleController {
             }
         } catch (e) {
             console.log(e)
-            return next(ApiError.bedRequest('Не заданы параметры'))
+            return next(ApiError.internal('Не заданы параметры'))
         }
     }
 }

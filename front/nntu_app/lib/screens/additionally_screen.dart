@@ -1,20 +1,21 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nntu_app/constants.dart';
-import 'package:nntu_app/models/additionally_controller.dart';
-import 'package:nntu_app/models/marks_model.dart';
+import 'package:nntu_app/models/additionally_model.dart';
 import 'package:nntu_app/screens/about_us.dart';
 import 'package:nntu_app/screens/settings_screen.dart';
 import 'package:nntu_app/screens/tasks_screen.dart';
 import 'package:nntu_app/theme/theme_manager.dart';
 import 'package:nntu_app/widgets/screen_scaffold.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 // Еще
 
 class AdditionallyScreen extends StatelessWidget {
+  const AdditionallyScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context);
@@ -28,15 +29,7 @@ class AdditionallyScreen extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              // height: 350,
               decoration: BoxDecoration(
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black54,
-                      offset: Offset(0, 2),
-                      blurRadius: 3,
-                      blurStyle: BlurStyle.solid)
-                ],
                 color: themeModel.isDark
                     ? kSecondaryColorDark
                     : kSecondaryColorLight,
@@ -45,7 +38,7 @@ class AdditionallyScreen extends StatelessWidget {
                   bottomRight: Radius.circular(30),
                 ),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.only(right: 30, left: 30, top: 20),
               child: _LoginWidget(),
             ),
             Container(
@@ -56,13 +49,6 @@ class AdditionallyScreen extends StatelessWidget {
                     ? kSecondaryColorDark
                     : kSecondaryColorLight,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black54,
-                      offset: Offset(0, 2),
-                      blurRadius: 3,
-                      blurStyle: BlurStyle.solid)
-                ],
               ),
               child: Column(
                 children: [
@@ -103,7 +89,7 @@ class AdditionallyScreen extends StatelessWidget {
                               ? kTextColorDark
                               : kTextColorLight,
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Text(
                           'Поиск преподавателя',
                           style: Theme.of(context).textTheme.headline2,
@@ -131,7 +117,7 @@ class AdditionallyScreen extends StatelessWidget {
                               ? kTextColorDark
                               : kTextColorLight,
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Text(
                           'Задачи',
                           style: Theme.of(context).textTheme.headline2,
@@ -196,45 +182,75 @@ class _LoginWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextFormField(
+                        controller: TextEditingController(
+                            text: additionallyModel.userSername),
                         onChanged: (val) {
                           additionallyModel.setUserSername(val);
                         },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(0),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(0),
                           border: InputBorder.none,
+                          hintText: 'Фамилия',
+                          hintStyle: GoogleFonts.getFont(
+                            'Roboto',
+                            fontSize: 24,
+                            color: themeModel.isDark
+                                ? kTextColorDark.withOpacity(0.5)
+                                : kTextColorLight.withOpacity(0.5),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         enabled: additionallyModel.edited,
-                        initialValue: additionallyModel.userSername,
                         maxLines: 2,
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ),
                     Expanded(
                       child: TextFormField(
+                        controller: TextEditingController(
+                            text: additionallyModel.userName),
                         onChanged: (val) {
                           additionallyModel.setUserName(val);
                         },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(0),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(0),
                           border: InputBorder.none,
+                          hintText: 'Имя',
+                          hintStyle: GoogleFonts.getFont(
+                            'Roboto',
+                            fontSize: 24,
+                            color: themeModel.isDark
+                                ? kTextColorDark.withOpacity(0.5)
+                                : kTextColorLight.withOpacity(0.5),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         enabled: additionallyModel.edited,
-                        initialValue: additionallyModel.userName,
                         maxLines: 2,
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ),
                     Expanded(
                       child: TextFormField(
+                        controller: TextEditingController(
+                            text: additionallyModel.userPatronymic),
                         onChanged: (val) {
                           additionallyModel.setUserPatronymic(val);
                         },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(0),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(0),
                           border: InputBorder.none,
+                          hintText: 'Отчество',
+                          hintStyle: GoogleFonts.getFont(
+                            'Roboto',
+                            fontSize: 24,
+                            color: themeModel.isDark
+                                ? kTextColorDark.withOpacity(0.5)
+                                : kTextColorLight.withOpacity(0.5),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         enabled: additionallyModel.edited,
-                        initialValue: additionallyModel.userPatronymic,
                         maxLines: 2,
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
@@ -257,16 +273,26 @@ class _LoginWidget extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
+                              controller: TextEditingController(
+                                  text: additionallyModel.userGroup),
                               onChanged: (val) {
                                 additionallyModel.setUserGroup(val);
                               },
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.all(0),
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(0),
                                 border: InputBorder.none,
+                                hintText: 'Группа',
+                                hintStyle: GoogleFonts.getFont(
+                                  'Roboto',
+                                  fontSize: 24,
+                                  color: themeModel.isDark
+                                      ? kTextColorDark.withOpacity(0.5)
+                                      : kTextColorLight.withOpacity(0.5),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               enabled: additionallyModel.edited,
-                              initialValue: additionallyModel.userGroup,
-                              maxLines: 2,
+                              maxLines: 1,
                               style: Theme.of(context).textTheme.subtitle2,
                             ),
                           ),
@@ -285,16 +311,26 @@ class _LoginWidget extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
+                              controller: TextEditingController(
+                                  text: additionallyModel.userKey),
                               onChanged: (val) {
                                 additionallyModel.setUserKey(val);
                               },
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.all(0),
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(0),
                                 border: InputBorder.none,
+                                hintText: '№ билета',
+                                hintStyle: GoogleFonts.getFont(
+                                  'Roboto',
+                                  fontSize: 24,
+                                  color: themeModel.isDark
+                                      ? kTextColorDark.withOpacity(0.5)
+                                      : kTextColorLight.withOpacity(0.5),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               enabled: additionallyModel.edited,
-                              initialValue: '${additionallyModel.userKey}',
-                              maxLines: 2,
+                              maxLines: 1,
                               style: Theme.of(context).textTheme.subtitle2,
                             ),
                           ),
@@ -307,115 +343,140 @@ class _LoginWidget extends StatelessWidget {
               additionallyModel.edited
                   ? ElevatedButton(
                       onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  titleTextStyle:
-                                      Theme.of(context).textTheme.headline3,
-                                  title: Text(
-                                    'Кем Вы являетесь?',
-                                    style:
+                        if (additionallyModel.userName != '' &&
+                            additionallyModel.userSername != '' &&
+                            additionallyModel.userGroup != '' &&
+                            additionallyModel.userKey != '') {
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    titleTextStyle:
                                         Theme.of(context).textTheme.headline3,
-                                  ),
-                                  content: SizedBox(
-                                    height: 240,
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 70,
-                                          width: double.infinity,
-                                          child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                      const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 8,
-                                                          horizontal: 8)),
-                                              shadowColor:
-                                                  MaterialStateProperty.all(
-                                                      kButtonColor),
-                                            ),
-                                            onPressed: () {
-                                              additionallyModel
-                                                  .setUserType('bak_spec');
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              'СТУДЕНТ БАКАЛАВРИАТА/СПЕЦИАЛИТЕТА',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline3,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        SizedBox(
-                                          height: 70,
-                                          width: double.infinity,
-                                          child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                      const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 8,
-                                                          horizontal: 8)),
-                                              shadowColor:
-                                                  MaterialStateProperty.all(
-                                                      kButtonColor),
-                                            ),
-                                            onPressed: () {
-                                              additionallyModel
-                                                  .setUserType('mag');
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              'СТУДЕНТ МАГИСТРАТУРЫ',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline3,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        SizedBox(
-                                          height: 70,
-                                          width: double.infinity,
-                                          child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                      const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 8,
-                                                          horizontal: 8)),
-                                              shadowColor:
-                                                  MaterialStateProperty.all(
-                                                      kButtonColor),
-                                            ),
-                                            onPressed: () {
-                                              additionallyModel
-                                                  .setUserType('teacher');
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              'ПРЕПОДАВАТЕЛЬ',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline3,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                    title: Text(
+                                      'Кем Вы являетесь?',
+                                      style:
+                                          Theme.of(context).textTheme.headline3,
                                     ),
-                                  ),
-                                )).then((value) {
-                          if (additionallyModel.userType != '') {
-                            additionallyModel.saveUserData();
-                            additionallyModel.setEdited(false);
-                          }
-                        });
+                                    content: SizedBox(
+                                      height: 270,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 80,
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                padding:
+                                                    MaterialStateProperty.all(
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            vertical: 8,
+                                                            horizontal: 8)),
+                                                shadowColor:
+                                                    MaterialStateProperty.all(
+                                                        kButtonColor),
+                                              ),
+                                              onPressed: () {
+                                                additionallyModel
+                                                    .setUserType('bak_spec');
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'СТУДЕНТ БАКАЛАВРИАТА/СПЕЦИАЛИТЕТА',
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.getFont(
+                                                  'Roboto',
+                                                  fontSize: 18,
+                                                  color: kTextColorDark,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          SizedBox(
+                                            height: 80,
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                padding:
+                                                    MaterialStateProperty.all(
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            vertical: 8,
+                                                            horizontal: 8)),
+                                                shadowColor:
+                                                    MaterialStateProperty.all(
+                                                        kButtonColor),
+                                              ),
+                                              onPressed: () {
+                                                additionallyModel
+                                                    .setUserType('mag');
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'СТУДЕНТ МАГИСТРАТУРЫ',
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.getFont(
+                                                  'Roboto',
+                                                  fontSize: 18,
+                                                  color: kTextColorDark,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          SizedBox(
+                                            height: 80,
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                padding:
+                                                    MaterialStateProperty.all(
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            vertical: 8,
+                                                            horizontal: 8)),
+                                                shadowColor:
+                                                    MaterialStateProperty.all(
+                                                        kButtonColor),
+                                              ),
+                                              onPressed: () {
+                                                additionallyModel
+                                                    .setUserType('teacher');
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'ПРЕПОДАВАТЕЛЬ',
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.getFont(
+                                                  'Roboto',
+                                                  fontSize: 18,
+                                                  color: kTextColorDark,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )).then((value) {
+                            if (additionallyModel.userType != '') {
+                              additionallyModel.saveUserData();
+                              additionallyModel.setEdited(false);
+                            }
+                          });
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    content: Text(
+                                      'Упс, кажется заполнены не все поля!',
+                                      style:
+                                          Theme.of(context).textTheme.headline2,
+                                    ),
+                                  ));
+                        }
                       },
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(

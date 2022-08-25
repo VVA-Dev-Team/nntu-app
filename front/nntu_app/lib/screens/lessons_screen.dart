@@ -25,9 +25,9 @@ class LessonsScreen extends StatelessWidget {
           onTap: () async {
             await schedule.selectDate(context);
           },
-          child: const Icon(
+          child: Icon(
             Icons.calendar_month,
-            color: kTextColorDark,
+            color: themeModel.isDark ? kTextColorDark : kTextColorLight,
             size: 28,
           ),
         ),
@@ -184,7 +184,8 @@ class _ListLessonsWigdet extends StatelessWidget {
       ),
       header: WaterDropMaterialHeader(
         color: themeModel.isDark ? kTextColorDark : kTextColorLight,
-        backgroundColor: kButtonColor,
+        backgroundColor:
+            themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
       ),
       onRefresh: onRefresh,
       onLoading: onLoading,
@@ -217,13 +218,6 @@ class _ListLessonsWigdet extends StatelessWidget {
                             ? kSecondaryColorDark
                             : kSecondaryColorLight,
                         borderRadius: BorderRadius.circular(10),
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Colors.black54,
-                              offset: Offset(0, 2),
-                              blurRadius: 3,
-                              blurStyle: BlurStyle.solid)
-                        ],
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: ListView.separated(
@@ -278,15 +272,9 @@ class _SellectWeekWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       height: 70,
       decoration: BoxDecoration(
-          color: themeModel.isDark ? kSecondaryColorDark : kSecondaryColorLight,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: const [
-            BoxShadow(
-                color: Colors.black54,
-                offset: Offset(0, 1),
-                blurRadius: 3,
-                blurStyle: BlurStyle.solid)
-          ]),
+        color: themeModel.isDark ? kSecondaryColorDark : kSecondaryColorLight,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Row(
         children: [
           ElevatedButton(

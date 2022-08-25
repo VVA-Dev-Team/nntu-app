@@ -45,7 +45,7 @@ class EventsController {
             return res.json(schedule)
         } catch (e) {
             console.log(e)
-            return next(ApiError.bedRequest('Не заданы параметры'))
+            return next(ApiError.badRequest('Не заданы параметры'))
         }
     }
 
@@ -83,7 +83,7 @@ class EventsController {
             return res.json(schedule)
         } catch (e) {
             console.log(e)
-            return next(ApiError.bedRequest('Не заданы параметры'))
+            return next(ApiError.badRequest('Не заданы параметры'))
         }
     }
 
@@ -126,7 +126,7 @@ class EventsController {
             return res.json(event)
         } catch (e) {
             console.log(e)
-            return next(ApiError.bedRequest('Не заданы параметры'))
+            return next(ApiError.badRequest('Не заданы параметры'))
         }
     }
 }

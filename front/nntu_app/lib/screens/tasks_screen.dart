@@ -1,6 +1,7 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nntu_app/constants.dart';
 import 'package:nntu_app/models/tasks_model.dart';
 import 'package:nntu_app/theme/theme_manager.dart';
@@ -50,9 +51,10 @@ class _TasksScreenState extends State<TasksScreen> {
               loadStyle: LoadStyle.ShowWhenLoading,
               completeDuration: Duration(milliseconds: 500),
             ),
-            header: const WaterDropMaterialHeader(
-              color: kTextColorDark,
-              backgroundColor: kButtonColor,
+            header: WaterDropMaterialHeader(
+              color: themeModel.isDark ? kTextColorDark : kTextColorLight,
+              backgroundColor:
+                  themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
             ),
             onRefresh: () async {
               await tasksModel.getTasks();
@@ -160,13 +162,6 @@ class _TasksScreenState extends State<TasksScreen> {
                                   ? kSecondaryColorDark
                                   : kSecondaryColorLight,
                               borderRadius: BorderRadius.circular(10),
-                              boxShadow: const [
-                                BoxShadow(
-                                    color: Colors.black54,
-                                    offset: Offset(0, 1),
-                                    blurRadius: 3,
-                                    blurStyle: BlurStyle.solid),
-                              ],
                             ),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
@@ -253,13 +248,6 @@ class _TaskInfoScreen extends StatelessWidget {
                         ? kSecondaryColorDark
                         : kSecondaryColorLight,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Colors.black54,
-                          offset: Offset(0, 1),
-                          blurRadius: 3,
-                          blurStyle: BlurStyle.solid),
-                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,13 +336,6 @@ class _TaskInfoScreen extends StatelessWidget {
                         ? kSecondaryColorDark
                         : kSecondaryColorLight,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Colors.black54,
-                          offset: Offset(0, 1),
-                          blurRadius: 3,
-                          blurStyle: BlurStyle.solid),
-                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -423,17 +404,11 @@ class _TasksEditorScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   decoration: BoxDecoration(
-                      color: themeModel.isDark
-                          ? kSecondaryColorDark
-                          : kSecondaryColorLight,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black54,
-                            offset: Offset(0, 1),
-                            blurRadius: 3,
-                            blurStyle: BlurStyle.solid),
-                      ]),
+                    color: themeModel.isDark
+                        ? kSecondaryColorDark
+                        : kSecondaryColorLight,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -483,17 +458,11 @@ class _TasksEditorScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   decoration: BoxDecoration(
-                      color: themeModel.isDark
-                          ? kSecondaryColorDark
-                          : kSecondaryColorLight,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black54,
-                            offset: Offset(0, 1),
-                            blurRadius: 3,
-                            blurStyle: BlurStyle.solid),
-                      ]),
+                    color: themeModel.isDark
+                        ? kSecondaryColorDark
+                        : kSecondaryColorLight,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -526,15 +495,9 @@ class _StopDatePickerWidget extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-          color: themeModel.isDark ? kSecondaryColorDark : kSecondaryColorLight,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: const [
-            BoxShadow(
-                color: Colors.black54,
-                offset: Offset(0, 1),
-                blurRadius: 3,
-                blurStyle: BlurStyle.solid),
-          ]),
+        color: themeModel.isDark ? kSecondaryColorDark : kSecondaryColorLight,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -561,7 +524,11 @@ class _StopDatePickerWidget extends StatelessWidget {
               },
               child: Text(
                 'Выбрать',
-                style: Theme.of(context).textTheme.headline3,
+                style: GoogleFonts.getFont(
+                  'Roboto',
+                  fontSize: 18,
+                  color: kTextColorDark,
+                ),
               )),
         ],
       ),
@@ -598,15 +565,22 @@ class _InputFormWidget extends StatelessWidget {
           style: Theme.of(context).textTheme.headline2,
         ),
         TextFormField(
+          controller: TextEditingController(text: initialValue),
           maxLines: null,
           onChanged: onChanged,
-          initialValue: initialValue,
           style: Theme.of(context).textTheme.headline2,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(8),
             border: InputBorder.none,
             hintText: "Введите $inFormTitle",
-            hintStyle: Theme.of(context).textTheme.headline3,
+            hintStyle: GoogleFonts.getFont(
+              'Roboto',
+              fontSize: 21,
+              color: themeModel.isDark
+                  ? kTextColorDark.withOpacity(0.5)
+                  : kTextColorLight.withOpacity(0.5),
+              fontWeight: FontWeight.bold,
+            ),
             fillColor:
                 themeModel.isDark ? kSecondaryColorDark : kSecondaryColorLight,
             filled: true,
@@ -640,6 +614,7 @@ class _ChangePriorityWidget extends StatelessWidget {
           'Приоритет',
           style: Theme.of(context).textTheme.headline2,
         ),
+        const SizedBox(height: 7),
         Align(
           alignment: Alignment.center,
           child: Consumer<TasksModel>(builder: (context, value, state) {
@@ -652,10 +627,10 @@ class _ChangePriorityWidget extends StatelessWidget {
                   : kSecondaryColorLight,
               current: tasksModel.newPriority,
               values: const ['Не срочное', 'Срочное', 'Очень срочное'],
-              iconOpacity: 0.2,
+              iconOpacity: 1,
               borderColor:
                   themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(10.0),
               iconBuilder: (value, size) {
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -663,7 +638,11 @@ class _ChangePriorityWidget extends StatelessWidget {
                     child: Text(
                       value.toString(),
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline2,
+                      style: GoogleFonts.getFont(
+                        'Roboto',
+                        fontSize: 18,
+                        color: const Color.fromARGB(255, 209, 209, 209),
+                      ),
                     ),
                   ),
                 );

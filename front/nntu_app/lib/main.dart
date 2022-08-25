@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nntu_app/app.dart';
 import 'package:nntu_app/constants.dart';
-import 'package:nntu_app/models/additionally_controller.dart';
+import 'package:nntu_app/models/additionally_model.dart';
 import 'package:nntu_app/models/init_model.dart';
 import 'package:nntu_app/models/lessons_model.dart';
 import 'package:nntu_app/models/map_model.dart';
@@ -22,6 +23,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeModel()),
@@ -105,6 +113,9 @@ class MyApp extends StatelessWidget {
                       backgroundColor: kAppBarBackgroundColorLight,
                       iconTheme: IconThemeData(color: kButtonColor),
                     ),
+                    floatingActionButtonTheme:
+                        const FloatingActionButtonThemeData(
+                            backgroundColor: kButtonColor),
                     textTheme: TextTheme(
                       headline1: GoogleFonts.getFont(
                         'Roboto',

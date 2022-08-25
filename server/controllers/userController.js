@@ -19,7 +19,7 @@ class TasksController {
         }
         const candidate = await User.findOne({where: {email}})
         if (candidate) {
-            return next(ApiError.bedRequest('Пользователь уже существует'))
+            return next(ApiError.badRequest('Пользователь уже существует'))
         }
         const hashPassword = await bcrypt.hash(password, 5)
         const user = await User.create({email, role, password: hashPassword})
@@ -31,11 +31,11 @@ class TasksController {
         const {email, password} = req.body
         const user = await User.findOne({where: {email}})
         if (!user) {
-            return next(ApiError.bedRequest('Некорректный email'))
+            return next(ApiError.badRequest('Некорректный email'))
         }
         let comparePassword = bcrypt.compareSync(password, user.password)
         if (!comparePassword) {
-            return next(ApiError.bedRequest('Некорректный email'))
+            return next(ApiError.badRequest('Некорректный email'))
         }
         const token = generateJwt(user.id, user.email, user.role)
         return res.json({token})

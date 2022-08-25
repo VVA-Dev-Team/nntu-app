@@ -6,7 +6,7 @@ class MarksController {
     async getMarks(req, res, next) {
         const query = req.query
         if (!query['last_name'] || !query['first_name'] || !query['otc'] || !query['n_zach'] || !query['last_name']) {
-            return next(ApiError.bedRequest('Не заданы параметры'))
+            return next(ApiError.badRequest('Не заданы параметры'))
         }
         var options = {
             'method': 'POST',
@@ -96,7 +96,7 @@ class MarksController {
                     scrapedData['stat']['average'] = (average / count).toFixed(2);
                     res.json(scrapedData)
                 } catch (e) {
-                    return next(ApiError.bedRequest(`${e}`))
+                    return next(ApiError.internal(`${e}`))
                 }
             }
 

@@ -6,14 +6,9 @@ import 'package:provider/provider.dart';
 
 // Настройки
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
-  @override
-  _SettingsScreenState createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context);
@@ -24,7 +19,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
                 Row(
@@ -33,7 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       'Темная тема',
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
-                    Spacer(),
+                    const Spacer(),
                     IconButton(
                         icon: Icon(themeModel.isDark
                             ? Icons.nightlight_round

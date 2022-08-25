@@ -54,6 +54,7 @@ class AdditionallyModel extends ChangeNotifier {
 
   Future<void> loadData() async {
     final prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('userName'));
     if (prefs.getString('userName') != null &&
         prefs.getString('userSername') != null &&
         prefs.getString('userPatronymic') != null &&
@@ -66,6 +67,14 @@ class AdditionallyModel extends ChangeNotifier {
       _userGroup = prefs.getString('userGroup') ?? '';
       _userType = prefs.getString('userType') ?? '';
       _userKey = prefs.getString('userKey') ?? '';
+    } else {
+      _userName = '';
+      _userSername = '';
+      _userPatronymic = '';
+      _userGroup = '';
+      _userType = '';
+      _userKey = '';
+      _edited = true;
     }
     _isLoaded = true;
     notifyListeners();
@@ -90,6 +99,14 @@ class AdditionallyModel extends ChangeNotifier {
     await prefs.remove('userGroup');
     await prefs.remove('userType');
     await prefs.remove('userKey');
-    loadData();
+    _userName = '';
+    _userSername = '';
+    _userPatronymic = '';
+    _userGroup = '';
+    _userType = '';
+    _userKey = '';
+    _edited = true;
+
+    notifyListeners();
   }
 }

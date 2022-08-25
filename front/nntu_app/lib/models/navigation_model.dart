@@ -27,11 +27,11 @@ class NavigationModel extends ChangeNotifier {
     PagesClass(
       child: MapScreen(),
       icon: Icons.map_outlined,
-      name: "Карта",
+      name: "Навигация",
     ),
     PagesClass(
       child: LessonsScreen(),
-      icon: Icons.list_outlined,
+      icon: Icons.view_list_outlined,
       name: "Расписание",
     ),
     PagesClass(

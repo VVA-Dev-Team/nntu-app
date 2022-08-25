@@ -33,24 +33,33 @@ class ScreenScaffold extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: !disableAppbar
           ? AppBar(
+              backgroundColor: themeModel.isDark
+                  ? kSecondaryColorDark
+                  : kSecondaryColorLight,
+              actionsIconTheme: const IconThemeData(
+                  opacity: 1, color: kTextColorDark, shadows: []),
+              elevation: 0,
               title: Text(
                 title,
                 style: GoogleFonts.getFont(
-                  'Exo 2',
+                  'Roboto',
                   fontSize: 24,
-                  color: Colors.white,
+                  color: themeModel.isDark ? kTextColorDark : kTextColorLight,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               actions: actions,
-              iconTheme: const IconThemeData(
-                color: Colors.white, //change your color here
+              iconTheme: IconThemeData(
+                color: themeModel.isDark
+                    ? kTextColorDark
+                    : kTextColorLight, //change your color here
               ),
             )
           : null,
       body: body,
       bottomNavigationBar: !disableNavbar
           ? BottomNavigationBar(
+              elevation: 0,
               backgroundColor: themeModel.isDark
                   ? kSecondaryColorDark
                   : kSecondaryColorLight,

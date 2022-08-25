@@ -96,18 +96,19 @@ class TasksModel extends ChangeNotifier {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              colorScheme: ColorScheme.light(
-                primary: kButtonColor, // header background color
-                onPrimary: kTextColorDark, // header text color
-                onSurface: themeModel.isDark
-                    ? kTextColorDark
-                    : kTextColorLight, // body text color
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                  primary: kButtonColor, // button text color
-                ),
-              ),
+              brightness: Brightness.dark,
+              // colorScheme: ColorScheme.light(
+              //   primary: kButtonColor, // header background color
+              //   onPrimary: kTextColorDark, // header text color
+              //   onSurface: themeModel.isDark
+              //       ? kTextColorDark
+              //       : kTextColorLight, // body text color
+              // ),
+              // textButtonTheme: TextButtonThemeData(
+              //   style: TextButton.styleFrom(
+              //     primary: kButtonColor, // button text color
+              //   ),
+              // ),
             ),
             child: child!,
           );
@@ -120,23 +121,23 @@ class TasksModel extends ChangeNotifier {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            timePickerTheme: TimePickerThemeData(
-                hourMinuteColor: kButtonColor,
-                hourMinuteTextColor:
-                    themeModel.isDark ? kTextColorDark : kTextColorLight,
-                dialTextColor:
-                    themeModel.isDark ? kTextColorDark : kTextColorLight,
-                entryModeIconColor: kButtonColor,
-                backgroundColor: themeModel.isDark
-                    ? kSecondaryColorDark
-                    : kSecondaryColorLight),
+            // timePickerTheme: TimePickerThemeData(
+            //     hourMinuteColor: kButtonColor,
+            //     hourMinuteTextColor:
+            //         themeModel.isDark ? kTextColorDark : kTextColorLight,
+            //     dialTextColor:
+            //         themeModel.isDark ? kTextColorDark : kTextColorLight,
+            //     entryModeIconColor: kButtonColor,
+            //     backgroundColor: themeModel.isDark
+            //         ? kSecondaryColorDark
+            //         : kSecondaryColorLight),
             brightness: Brightness.dark,
-            primaryColor: Colors.cyan,
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                primary: kButtonColor,
-              ),
-            ),
+            // primaryColor: Colors.cyan,
+            // textButtonTheme: TextButtonThemeData(
+            //   style: TextButton.styleFrom(
+            //     primary: kButtonColor,
+            //   ),
+            // ),
           ),
           child: child!,
         );

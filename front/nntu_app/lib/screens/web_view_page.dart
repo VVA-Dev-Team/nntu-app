@@ -33,6 +33,7 @@ class WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context);
     return ScreenScaffold(
+      disableNavbar: true,
       title: title,
       body: Column(
         children: [

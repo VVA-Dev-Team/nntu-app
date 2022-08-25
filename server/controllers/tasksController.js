@@ -10,7 +10,7 @@ class TasksController {
             return res.json(tasks)
         } catch (e) {
             console.log(e)
-            return next(ApiError.bedRequest('Не заданы параметры'))
+            return next(ApiError.internal('Не заданы параметры'))
         }
     }
 
@@ -40,7 +40,7 @@ class TasksController {
 
         } catch (e) {
             console.log(e)
-            return next(ApiError.bedRequest('Не заданы параметры'))
+            return next(ApiError.internal('Не заданы параметры'))
         }
     }
 
@@ -71,7 +71,7 @@ class TasksController {
 
         } catch (e) {
             console.log(e)
-            return next(ApiError.bedRequest('Не заданы параметры'))
+            return next(ApiError.internal('Не заданы параметры'))
         }
     }
 
@@ -86,7 +86,7 @@ class TasksController {
             return res.json(tasks)
         } catch (e) {
             console.log(e)
-            return next(ApiError.bedRequest('Не заданы параметры'))
+            return next(ApiError.internal('Не заданы параметры'))
         }
     }
 }
