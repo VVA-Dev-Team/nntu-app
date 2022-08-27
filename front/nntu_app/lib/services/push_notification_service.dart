@@ -4,6 +4,7 @@ import 'package:nntu_app/constants.dart';
 class PushNotificationService {
   Future initialise() async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
+    FirebaseMessaging.instance.subscribeToTopic("allDevices");
 
     if (kDebugMode) {
       print(fcmToken);

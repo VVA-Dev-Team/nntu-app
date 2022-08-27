@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final pushNotificationService = PushNotificationService();
-    // pushNotificationService.initialise();
+    final pushNotificationService = PushNotificationService();
+    pushNotificationService.initialise();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
