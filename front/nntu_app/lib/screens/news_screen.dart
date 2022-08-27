@@ -144,7 +144,6 @@ class _ListNewsWigdet extends StatelessWidget {
       onRefresh: onRefresh,
       onLoading: onLoading,
       child: ListView.separated(
-        
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         separatorBuilder: ((context, index) => const SizedBox(height: 16)),

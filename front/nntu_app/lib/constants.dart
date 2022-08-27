@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const kDebugMode = false;
+const kDebugMode = true;
 
 const debugHostUrl = 'http://10.0.2.2:5000/';
 const releaseHostUrl = 'https://nntuapp.api.vvadev.ru/';

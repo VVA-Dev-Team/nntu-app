@@ -199,7 +199,7 @@ class _ListLessonsWigdet extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 10, bottom: 3),
+                      margin: const EdgeInsets.only(top: 10, bottom: 3),
                       child: Text(
                         weekDays[index],
                         style: GoogleFonts.getFont(
@@ -236,7 +236,7 @@ class _ListLessonsWigdet extends StatelessWidget {
                           startTime:
                               '${schedules[index][i].startTime ~/ 60}:${schedules[index][i].startTime % 60}',
                           endTime:
-                              '${schedules[index][i].stopTime ~/ 60}:${schedules[index][i].stopTime % 60}',
+                              '${schedules[index][i].stopTime ~/ 60}:${schedules[index][i].stopTime.remainder(60) < 10 ? 0 : ''}${schedules[index][i].stopTime.remainder(60)}',
                         ),
                       ),
                     ),

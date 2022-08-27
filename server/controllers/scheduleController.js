@@ -55,28 +55,54 @@ class ScheduleController {
                 for (let i = 0; i < schedule.length; i++) {
                     for (let j = 0; j < schedule[i].length; j++) {
                         const id = schedule[i][j]['id']
-                        const group = schedule[i][j]['group']
-                        const name = schedule[i][j]['name']
-                        const type = schedule[i][j]['type']
-                        const room = schedule[i][j]['room']
-                        const startTime = schedule[i][j]['startTime']
-                        const stopTime = schedule[i][j]['stopTime']
-                        const day = schedule[i][j]['day']
-                        const weeks = schedule[i][j]['weeks']
-                        const teacher = schedule[i][j]['teacher']
-                        const comment = schedule[i][j]['comment']
-                        resSchedule.push(await Schedule.update({
-                            group,
-                            name,
-                            type,
-                            room,
-                            startTime,
-                            stopTime,
-                            day,
-                            weeks,
-                            teacher,
-                            comment
-                        }, {where: {id: id}}))
+                        if (id) {
+                            const group = schedule[i][j]['group']
+                            const name = schedule[i][j]['name']
+                            const type = schedule[i][j]['type']
+                            const room = schedule[i][j]['room']
+                            const startTime = schedule[i][j]['startTime']
+                            const stopTime = schedule[i][j]['stopTime']
+                            const day = schedule[i][j]['day']
+                            const weeks = schedule[i][j]['weeks']
+                            const teacher = schedule[i][j]['teacher']
+                            const comment = schedule[i][j]['comment']
+                            resSchedule.push(await Schedule.update({
+                                group,
+                                name,
+                                type,
+                                room,
+                                startTime,
+                                stopTime,
+                                day,
+                                weeks,
+                                teacher,
+                                comment
+                            }, {where: {id: id}}))
+                        } else {
+                            const group = schedule[i][j]['group']
+                            const name = schedule[i][j]['name']
+                            const type = schedule[i][j]['type']
+                            const room = schedule[i][j]['room']
+                            const startTime = schedule[i][j]['startTime']
+                            const stopTime = schedule[i][j]['stopTime']
+                            const day = schedule[i][j]['day']
+                            const weeks = schedule[i][j]['weeks']
+                            const teacher = schedule[i][j]['teacher']
+                            const comment = schedule[i][j]['comment']
+                            resSchedule.push(await Schedule.create({
+                                group,
+                                name,
+                                type,
+                                room,
+                                startTime,
+                                stopTime,
+                                day,
+                                weeks,
+                                teacher,
+                                comment
+                            }))
+                        }
+
                     }
                 }
 
