@@ -1,0 +1,32 @@
+.ModelWindow {
+    z-index: 10000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.block {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
+.close {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.close > img {
+    width: 30px;
+    height: 30px;
+    padding: 0 !important;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+}

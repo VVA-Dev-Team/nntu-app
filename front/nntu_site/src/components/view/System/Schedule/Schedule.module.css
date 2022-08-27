@@ -1,0 +1,100 @@
+.info {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.counter {
+    display: flex;
+    flex-direction: row;
+    height: 2rem;
+    /* width: 5rem; */
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.days{
+    width: 100%;
+    margin-top: 0.6rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.4rem;
+    overflow-x: scroll;
+}
+
+/* .scroll {
+    transform: rotate(180deg);
+} */
+
+.day {
+    min-width: 22% !important;
+    /* width: 200px; */
+}
+
+.day_header {
+    /* width: 100%; */
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.week {
+    height: 100%;
+    aspect-ratio: 1 !important;
+    background-color: white !important;
+    border: 1px solid rgba(0, 0, 0, 0.175);
+    color: black
+}
+
+.arrow {
+    padding: 0 !important;
+    height: 2rem;
+    width: 2rem;
+    background-color: white !important;
+    border: 1px solid hsla(152, 69%, 31%, 0.175);
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.arrow:hover {
+    background-color: hsla(152, 69%, 31%, 0.175) !important;
+}
+
+.arrow>img {
+    /* width: 50%; */
+    height: 80%;
+    margin: 0 !important;
+}
+
+.left {
+    transform: rotate(180deg);
+}
+
+@media (max-width: 1199px) and (min-width: 992px) {
+    .day {
+        min-width: 40% !important;
+    }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+    .day {
+        min-width: 50% !important;
+    }
+}
+
+@media (max-width: 767px) and (min-width: 576px) {
+    .day {
+        min-width: 100% !important;
+    }
+}
+
+@media (max-width: 575px) and (min-width: 0px) {
+    .day {
+        min-width: 100% !important;
+    }
+}

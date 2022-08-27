@@ -1,0 +1,75 @@
+.no_scroll {
+    overflow-y: hidden;
+}
+
+.info {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.days {
+    width: 100%;
+    margin-top: 0.6rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.4rem;
+    overflow-x: scroll;
+}
+
+.day {
+    min-width: 22% !important;
+    /* width: 200px; */
+}
+
+.day_header {
+    /* width: 100%; */
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.day_header > p {
+    font-size: 100% !important;
+}
+
+.day_header > button {
+    /* height: 96%; */
+    height: 100%;
+    aspect-ratio: 1/1;
+    /* padding: 0.2rem; */
+    /* font-size: large; */
+    font-weight: 500;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 1140px;
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 992px) {
+    .day {
+        min-width: 40% !important;
+    }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+    .day {
+        min-width: 50% !important;
+    }
+}
+
+@media (max-width: 767px) and (min-width: 576px) {
+    .day {
+        min-width: 100% !important;
+    }
+}
+
+@media (max-width: 575px) and (min-width: 0px) {
+    .day {
+        min-width: 100% !important;
+    }
+}

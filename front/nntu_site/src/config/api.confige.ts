@@ -1,0 +1,1 @@
+export const API_URL = 'https://nntuapp.api.vvadev.ru/api'
