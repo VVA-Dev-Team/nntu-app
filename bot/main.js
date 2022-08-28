@@ -39,7 +39,7 @@ const start = () => {
 
             console.log(encodedText)
 
-            bot.sendMessage(chatId, `Твой код: ${encodedText}`);
+            bot.sendMessage(chatId, `Твой код: ${encodedText}\nОн действителен в течении сегодняшнего дня`);
         }
     });
 
