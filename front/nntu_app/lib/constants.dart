@@ -5,7 +5,7 @@ const kDebugMode = true;
 const debugHostUrl = 'http://10.0.2.2:5000/';
 const releaseHostUrl = 'https://nntuapp.api.vvadev.ru/';
 
-const kStartLessonsWeek = 5;
+const kStartLessonsWeek = 35;
 
 const kPrimaryColorDark = Color.fromARGB(255, 15, 15, 15);
 const kPrimaryColorLight = Color.fromARGB(255, 230, 230, 230);

@@ -219,6 +219,7 @@ class _ListLessonsWigdet extends StatelessWidget {
                             : kSecondaryColorLight,
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      margin: const EdgeInsets.only(bottom: 8),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: ListView.separated(
                         shrinkWrap: true,
@@ -288,7 +289,7 @@ class _SellectWeekWidget extends StatelessWidget {
               color: kButtonColor,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Center(
               child: Text(
@@ -301,7 +302,7 @@ class _SellectWeekWidget extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           ElevatedButton(
             onPressed: onPressedNext,
             style: ButtonStyle(

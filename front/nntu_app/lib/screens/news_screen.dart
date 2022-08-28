@@ -146,7 +146,7 @@ class _ListNewsWigdet extends StatelessWidget {
       child: ListView.separated(
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        separatorBuilder: ((context, index) => const SizedBox(height: 16)),
+        separatorBuilder: ((context, index) => const SizedBox(height: 4)),
         itemBuilder: ((context, index) => news[index]["addedBy"] == 'ADMIN'
             ? _AdminNewsCard(
                 title: news[index]["title"],
@@ -214,7 +214,7 @@ class _AdminNewsCard extends StatelessWidget {
         _handleButtonPress(context);
       },
       child: Container(
-        margin: const EdgeInsets.only(top: 8),
+        margin: const EdgeInsets.only(top: 8, bottom: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
@@ -337,6 +337,7 @@ class _SystemNewsCard extends StatelessWidget {
         _handleURLButtonPress(context, link, title);
       },
       child: Container(
+        margin: const EdgeInsets.only(top: 8, bottom: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
