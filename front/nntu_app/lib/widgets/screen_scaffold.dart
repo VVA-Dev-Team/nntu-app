@@ -33,6 +33,7 @@ class ScreenScaffold extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: !disableAppbar
           ? AppBar(
+              centerTitle: false,
               backgroundColor: themeModel.isDark
                   ? kSecondaryColorDark
                   : kSecondaryColorLight,
@@ -41,6 +42,7 @@ class ScreenScaffold extends StatelessWidget {
               elevation: 0,
               title: Text(
                 title,
+                textAlign: TextAlign.left,
                 style: GoogleFonts.getFont(
                   'Roboto',
                   fontSize: 24,

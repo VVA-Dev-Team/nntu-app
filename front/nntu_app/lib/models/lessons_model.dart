@@ -79,7 +79,7 @@ class LessonsModel extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       var response = await http.get(Uri.parse(
-          '${kDebugMode ? debugHostUrl : releaseHostUrl}api/schedule?group=${prefs.getString('userGroup')}&week_number=${_weekNumber % 2 == 0 ? '-2' : '-1'}'));
+          '${kDebugMode ? debugHostUrl : releaseHostUrl}api/schedule?group=${prefs.getString('userGroup')}&week_number=${_weekNumber % 2 == 0 ? -2 : -1}'));
       dynamic responseData = json.decode(response.body);
 
       if (response.statusCode == 200) {

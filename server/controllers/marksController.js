@@ -5,7 +5,7 @@ const ApiError = require('../error/ApiError')
 class MarksController {
     async getMarks(req, res, next) {
         const query = req.query
-        if (!query['last_name'] || !query['first_name'] || !query['otc'] || !query['n_zach'] || !query['last_name']) {
+        if (!query['last_name'] || !query['first_name'] || !query['otc'] || !query['n_zach'] || !query['learn_type']) {
             return next(ApiError.badRequest('Не заданы параметры'))
         }
         var options = {
@@ -29,80 +29,133 @@ class MarksController {
                 return next(ApiError.forbidden('Студент не найден'))
             }
             if (response.statusCode !== 200) {
-                return next(ApiError.internal('Непредвиденная ошибка'))
-            } else {
-                console.log(response.body)
-                console.log(response.statusCode)
-                try {
-                    var scrapedData = {
-                        marks: [],
-                        stat: {
-                            predmets: {},
-                            average: 0,
-                            term: []
-                        },
-                    }
-                    const $ = cheerio.load(response.body, null, false);
-
-                    $('table').each((index2, element2) => {
-                        const el = cheerio.load(element2, null, false);
-                        var table = []
-                        el('tbody > tr').each((index, element) => {
-                            const tds = $(element).find('td')
-                            if ($(tds[0]).text() !== '' && $(tds[0]).text() !== 'Дисциплина' && $(tds[0]).text() !== ':'
-                                && $(tds[0]).text() !== 'Факультет ' && $(tds[0]).text() !== 'Курс' && $(tds[0]).text() !== 'Группа'
-                                && $(tds[0]).text() !== '\n                      ' && $(tds[0]).text() !== '(оценка)') {
-                                const predmet = $(tds[0]).text().trim()
-                                const kn1 = {mark: $(tds[1]).text().trim() || -1, leave: $(tds[2]).text().trim()}
-                                const kn2 = {mark: $(tds[3]).text().trim() || -1, leave: $(tds[4]).text().trim()}
-                                const session = $(tds[5]).text().trim()
-                                const typeOfAttestation = $(tds[6]).text().trim()
-                                const tableRow = {predmet, kn1, kn2, session, typeOfAttestation}
-                                table.push(tableRow)
-                            }
-                        })
-                        if (table.length !== 0) {
-                            scrapedData['marks'].push(table)
-                        }
-
-                    })
-                    var index = 0
-                    var average = 0
-                    var count = 0
-                    scrapedData['marks'].forEach(function (semester) {
-                        index += 1
-                        var termAverage = 0
-                        var termCount = 0
-                        semester.forEach(function (el) {
-                            if (el['session'] >= '0' && el['session'] <= '5') {
-                                if (el['predmet'] in scrapedData['stat']) {
-                                    scrapedData['stat']['predmets'][el['predmet']].push(Number(el['session']))
-                                    average += Number(el['session'])
-                                    count += 1
-                                    termAverage += Number(el['session'])
-                                    termCount += 1
-                                } else {
-                                    scrapedData['stat']['predmets'][el['predmet']] = []
-                                    scrapedData['stat']['predmets'][el['predmet']].push(Number(el['session']))
-                                    average += Number(el['session'])
-                                    count += 1
-                                    termAverage += Number(el['session'])
-                                    termCount += 1
-                                }
-                            }
-                        })
-                        scrapedData['stat']['term'].push(isNaN((termAverage / termCount).toFixed(2)) ? '-' : (termAverage / termCount).toFixed(2))
-                    })
-                    scrapedData['stat']['average'] = (average / count).toFixed(2);
-                    res.json(scrapedData)
-                } catch (e) {
-                    return next(ApiError.internal(`${e}`))
-                }
+                return next(ApiError.internal('Непредвиденная ошибка. StatusCode = ', response.statusCode))
             }
 
+            //console.log('response = ', response.body)
 
-        });
+            let scrapedData = {
+                marks: [],
+                stat: {
+                    predmets: {},
+                    average: 0,
+                    term: []
+                },
+            }
 
+            // try {
+            const $ = cheerio.load(response.body, null, false);
+
+            $('table.table').each((tableIndex, table) => {
+                table = cheerio.load(table, null, false);
+                var predmetsInTable = []
+
+                let headers = 0
+
+                table('tbody > tr.table_header').each((tableheaderIndex, tableheader) => {
+                    headers += 1
+                })
+
+                if (headers === 2) {
+                    table('tbody > tr.tr_class').each((tablerowIndex, tablerow) => {
+                        tablerow = cheerio.load(tablerow, null, false)
+                        const tds = tablerow('*').find('td')
+
+                        // console.log({
+                        //     predmet: tablerow(tds[0]).text().trim() || '-',
+                        //     kn1: {
+                        //         mark: tablerow(tds[1]).text().trim() || '-',
+                        //         leave: tablerow(tds[2]).text().trim() || '-'
+                        //     },
+                        //     kn2: {
+                        //         mark: tablerow(tds[3]).text().trim() || '-',
+                        //         leave: tablerow(tds[4]).text().trim() || '-'
+                        //     },
+                        //     session: tablerow(tds[5]).text().trim() || '-',
+                        //     typeOfAttestation: tablerow(tds[6]).text().trim() || '-'
+                        // })
+
+                        predmetsInTable.push({
+                            predmet: tablerow(tds[0]).text().trim() || '-',
+                            kn1: {
+                                mark: tablerow(tds[1]).text().trim() || '-',
+                                leave: tablerow(tds[2]).text().trim() || '-'
+                            },
+                            kn2: {
+                                mark: tablerow(tds[3]).text().trim() || '-',
+                                leave: tablerow(tds[4]).text().trim() || '-'
+                            },
+                            session: tablerow(tds[5]).text().trim() || '-',
+                            typeOfAttestation: tablerow(tds[6]).text().trim() || '-'
+                        })
+
+                    })
+                } else {
+                    table('tbody > tr.tr_class').each((tablerowIndex, tablerow) => {
+                        tablerow = cheerio.load(tablerow, null, false)
+                        const tds = tablerow('*').find('td')
+
+                        // console.log({
+                        //     predmet: tablerow(tds[0]).text().trim() || '-',
+                        //     session: tablerow(tds[1]).text().trim() || '-',
+                        //     typeOfAttestation: tablerow(tds[2]).text().trim() || '-'
+                        // })
+
+                        predmetsInTable.push({
+                            predmet: tablerow(tds[0]).text().trim() || '-',
+                            kn1: {
+                                mark: '-',
+                                leave: '-'
+                            },
+                            kn2: {
+                                mark: '-',
+                                leave: '-'
+                            },
+                            session: tablerow(tds[1]).text().trim() || '-',
+                            typeOfAttestation: tablerow(tds[2]).text().trim() || '-'
+                        })
+                    })
+                }
+
+                if (predmetsInTable.length !== 0) {
+                    scrapedData['marks'].push(predmetsInTable)
+                }
+            })
+
+            var index = 0
+            var average = 0
+            var count = 0
+            scrapedData['marks'].forEach(function (semester) {
+                index += 1
+                var termAverage = 0
+                var termCount = 0
+                semester.forEach(function (el) {
+                    if (el['session'] >= '0' && el['session'] <= '5') {
+                        if (el['predmet'] in scrapedData['stat']) {
+                            scrapedData['stat']['predmets'][el['predmet']].push(Number(el['session']))
+                            average += Number(el['session'])
+                            count += 1
+                            termAverage += Number(el['session'])
+                            termCount += 1
+                        } else {
+                            scrapedData['stat']['predmets'][el['predmet']] = []
+                            scrapedData['stat']['predmets'][el['predmet']].push(Number(el['session']))
+                            average += Number(el['session'])
+                            count += 1
+                            termAverage += Number(el['session'])
+                            termCount += 1
+                        }
+                    }
+                })
+                scrapedData['stat']['term'].push(isNaN((termAverage / termCount).toFixed(2)) ? '-' : (termAverage / termCount).toFixed(2))
+            })
+            scrapedData['stat']['average'] = (average / count).toFixed(2);
+            // console.log(scrapedData)
+            res.json(scrapedData)
+            // } catch (e) {
+            //     return next(ApiError.internal(`${e}`))
+            // }
+        })
     }
 }
 

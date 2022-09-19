@@ -173,8 +173,8 @@ class _LoginWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
-              Container(
+              const SizedBox(height: 24),
+              SizedBox(
                 height: 140,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -258,7 +258,7 @@ class _LoginWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 60,
                 child: Row(
                   children: [
@@ -552,7 +552,7 @@ class _LoginWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
             ],
           )
         : Shimmer.fromColors(
@@ -564,7 +564,7 @@ class _LoginWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
-                Container(
+                SizedBox(
                   height: 140,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -597,7 +597,7 @@ class _LoginWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 60,
                   child: Row(
                     children: [
@@ -698,7 +698,7 @@ class _LoginWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
               ],
             ),
           );

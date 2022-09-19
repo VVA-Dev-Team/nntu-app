@@ -60,155 +60,313 @@ class _TasksScreenState extends State<TasksScreen> {
               await tasksModel.getTasks();
               refreshController.refreshFailed();
             },
-            child: ListView.separated(
-                itemBuilder: ((context, index) => Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 4),
-                      child: Slidable(
-                        key: ValueKey(index),
-                        endActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          dragDismissible: false,
-                          children: [
-                            SlidableAction(
-                              borderRadius: BorderRadius.circular(10),
-                              onPressed: (context) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text(
-                                      'Задача удалится для всех',
-                                      style:
-                                          Theme.of(context).textTheme.headline2,
-                                    ),
-                                    content: Text(
-                                      'Вы уверены, что хотите её удалить?',
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
-                                    ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text(
-                                          'ОТМЕНА',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8),
+                tasksModel.tasks.isEmpty && tasksModel.oldTasks.isEmpty
+                    ? Text(
+                        'ЗАДАЧИ ОТСУТСТВУЮТ',
+                        style: Theme.of(context).textTheme.headline4,
+                      )
+                    : Container(),
+                tasksModel.tasks.isEmpty
+                    ? Container()
+                    : Text(
+                        'АКТУАЛЬНЫЕ ЗАДАЧИ',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                Flexible(
+                  child: ListView.separated(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: ((context, index) => Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 4),
+                            child: Slidable(
+                              key: ValueKey(index),
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                dragDismissible: false,
+                                children: [
+                                  SlidableAction(
+                                    borderRadius: BorderRadius.circular(10),
+                                    onPressed: (context) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: Text(
+                                            'Задача удалится для всех',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline2,
+                                          ),
+                                          content: Text(
+                                            'Вы уверены, что хотите её удалить?',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline3,
+                                          ),
+                                          actionsAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'ОТМЕНА',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline3,
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                tasksModel.deleteTask(
+                                                    tasksModel.tasks[index].id);
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'УДАЛИТЬ',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline3,
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                      );
+                                    },
+                                    backgroundColor: Color(0xFFFE4A49),
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: 'Удалить',
+                                  ),
+                                ],
+                              ),
+                              startActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                dragDismissible: false,
+                                children: [
+                                  SlidableAction(
+                                    borderRadius: BorderRadius.circular(10),
+                                    onPressed: (context) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  _TasksEditorScreen(
+                                                    index: index,
+                                                    isEditor: true,
+                                                  )));
+                                    },
+                                    backgroundColor: Color(0xFF0392CF),
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.edit,
+                                    label: 'Изменить',
+                                  ),
+                                ],
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => _TaskInfoScreen(
+                                                taskInfo:
+                                                    tasksModel.tasks[index],
+                                              )));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: themeModel.isDark
+                                        ? kSecondaryColorDark
+                                        : kSecondaryColorLight,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(tasksModel.tasks[index].title,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2),
+                                          Text(
+                                              tasksModel
+                                                  .tasks[index].lessonName,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline3),
+                                          Text(tasksModel.tasks[index].stopDate,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline3),
+                                        ],
                                       ),
-                                      TextButton(
-                                        onPressed: () {
-                                          tasksModel.deleteTask(
-                                              tasksModel.tasks[index].id);
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text(
-                                          'УДАЛИТЬ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3,
+                                      // const Spacer(),
+                                      // Checkbox(
+                                      //   value: tasksModel.tasks[index].status,
+                                      //   onChanged: (i) {
+                                      //     tasksModel.setTaskStatus(
+                                      //         index, i ?? false);
+                                      //   },
+                                      //   checkColor: kTextColorDark,
+                                      //   fillColor: MaterialStateProperty.all(
+                                      //       tasksModel.tasks[index].priority ==
+                                      //               'Очень срочное'
+                                      //           ? Colors.red
+                                      //           : tasksModel.tasks[index]
+                                      //                       .priority ==
+                                      //                   'Срочное'
+                                      //               ? Colors.orange
+                                      //               : kButtonColor),
+                                      // ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )),
+                      separatorBuilder: ((context, index) =>
+                          const SizedBox(height: 8)),
+                      itemCount: tasksModel.tasks.length),
+                ),
+                tasksModel.oldTasks.isEmpty
+                    ? Container()
+                    : Text(
+                        'СТАРЫЕ ЗАДАЧИ',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                Flexible(
+                  child: ListView.separated(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: ((context, index) => Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 4),
+                            child: Slidable(
+                              key: ValueKey(index),
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                dragDismissible: false,
+                                children: [
+                                  SlidableAction(
+                                    borderRadius: BorderRadius.circular(10),
+                                    onPressed: (context) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: Text(
+                                            'Задача удалится для всех',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline2,
+                                          ),
+                                          content: Text(
+                                            'Вы уверены, что хотите её удалить?',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline3,
+                                          ),
+                                          actionsAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'ОТМЕНА',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline3,
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                tasksModel.deleteTask(tasksModel
+                                                    .oldTasks[index].id);
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'УДАЛИТЬ',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline3,
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                      );
+                                    },
+                                    backgroundColor: Color(0xFFFE4A49),
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: 'Удалить',
+                                  ),
+                                ],
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => _TaskInfoScreen(
+                                                taskInfo:
+                                                    tasksModel.oldTasks[index],
+                                              )));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: themeModel.isDark
+                                        ? kSecondaryColorDark
+                                        : kSecondaryColorLight,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(tasksModel.oldTasks[index].title,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2),
+                                          Text(
+                                              tasksModel
+                                                  .oldTasks[index].lessonName,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline3),
+                                          Text(
+                                              tasksModel
+                                                  .oldTasks[index].stopDate,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline3),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                );
-                              },
-                              backgroundColor: Color(0xFFFE4A49),
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: 'Удалить',
-                            ),
-                          ],
-                        ),
-                        startActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          dragDismissible: false,
-                          children: [
-                            SlidableAction(
-                              borderRadius: BorderRadius.circular(10),
-                              onPressed: (context) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            _TasksEditorScreen(
-                                              index: index,
-                                              isEditor: true,
-                                            )));
-                              },
-                              backgroundColor: Color(0xFF0392CF),
-                              foregroundColor: Colors.white,
-                              icon: Icons.edit,
-                              label: 'Изменить',
-                            ),
-                          ],
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => _TaskInfoScreen(
-                                          taskInfo: tasksModel.tasks[index],
-                                        )));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: themeModel.isDark
-                                  ? kSecondaryColorDark
-                                  : kSecondaryColorLight,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            child: Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(tasksModel.tasks[index].title,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2),
-                                    Text(tasksModel.tasks[index].lessonName,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3),
-                                    Text(tasksModel.tasks[index].stopDate,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3),
-                                  ],
                                 ),
-                                const Spacer(),
-                                Checkbox(
-                                  value: tasksModel.tasks[index].status,
-                                  onChanged: (i) {
-                                    tasksModel.setTaskStatus(index, i ?? false);
-                                  },
-                                  checkColor: kTextColorDark,
-                                  fillColor: MaterialStateProperty.all(
-                                      tasksModel.tasks[index].priority ==
-                                              'Очень срочное'
-                                          ? Colors.red
-                                          : tasksModel.tasks[index].priority ==
-                                                  'Срочное'
-                                              ? Colors.yellow
-                                              : kButtonColor),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                    )),
-                separatorBuilder: ((context, index) =>
-                    const SizedBox(height: 8)),
-                itemCount: tasksModel.tasks.length),
+                          )),
+                      separatorBuilder: ((context, index) =>
+                          const SizedBox(height: 8)),
+                      itemCount: tasksModel.oldTasks.length),
+                ),
+              ],
+            ),
           ),
         );
       }),
@@ -382,12 +540,14 @@ class _TasksEditorScreen extends StatelessWidget {
         title: isEditor ? 'Изменение задачи' : 'Добавление задачи',
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            if (isEditor) {
-              await tasksModel.editTask(tasksModel.tasks[index].id);
-            } else {
-              await tasksModel.addTask();
+            if (tasksModel.valodateData(isEditor, index, context)) {
+              if (isEditor) {
+                await tasksModel.editTask(tasksModel.tasks[index].id);
+              } else {
+                await tasksModel.addTask();
+              }
+              Navigator.pop(context);
             }
-            Navigator.pop(context);
           },
           child: const Icon(
             Icons.save,

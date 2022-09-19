@@ -11,8 +11,17 @@ class TasksModel extends ChangeNotifier {
   List<Task> _tasks = [];
   List<Task> get tasks => _tasks;
 
+  List<Task> _oldTasks = [];
+  List<Task> get oldTasks => _oldTasks;
+
+  List<int> _confirmedTasks = [];
+  List<int> get confirmedTasks => _confirmedTasks;
+
   Future<void> getTasks() async {
+    await getConfirmedTasks();
+
     _tasks = [];
+    _oldTasks = [];
 
     final prefs = await SharedPreferences.getInstance();
 
@@ -21,19 +30,39 @@ class TasksModel extends ChangeNotifier {
     dynamic responseData = json.decode(response.body);
     if (response.statusCode == 200) {
       for (var i in responseData) {
-        _tasks.add(Task(
-          i['id'],
-          i['title'],
-          i['description'],
-          i['lessonName'],
-          i['priority'],
-          i['stopDate'],
-          i['addedByStudent'],
-          false,
-        ));
+        print('*' * 24);
+        print(i['id']);
+        print(_confirmedTasks.contains(i['id']));
+        print(_confirmedTasks);
+        print('*' * 24);
+        if (DateTime.now()
+            .isBefore(DateFormat('kk:mm – dd.MM.yyyy').parse(i['stopDate']))) {
+          _tasks.add(Task(
+            i['id'],
+            i['title'],
+            i['description'],
+            i['lessonName'],
+            i['priority'],
+            i['stopDate'],
+            i['addedByStudent'],
+            _confirmedTasks.contains(i['id']) ? true : false,
+          ));
+        } else {
+          _oldTasks.add(Task(
+            i['id'],
+            i['title'],
+            i['description'],
+            i['lessonName'],
+            i['priority'],
+            i['stopDate'],
+            i['addedByStudent'],
+            _confirmedTasks.contains(i['id']) ? true : false,
+          ));
+        }
       }
     } else {
       _tasks = [];
+      _oldTasks = [];
     }
 
     notifyListeners();
@@ -41,11 +70,15 @@ class TasksModel extends ChangeNotifier {
 
   Future<void> setTaskStatus(int id, bool status) async {
     _tasks[id].status = status;
+    if (!_confirmedTasks.contains(_tasks[id].id) && status) {
+      await saveConfirmedTask(_tasks[id].id);
+    } else if (_confirmedTasks.contains(_tasks[id].id) && !status) {
+      await deleteConfirmedTask(_tasks[id].id);
+    }
     notifyListeners();
   }
 
   Future<void> deleteTask(int id) async {
-    final prefs = await SharedPreferences.getInstance();
     var response = await http.delete(Uri.parse(
         "${kDebugMode ? debugHostUrl : releaseHostUrl}api/tasks?id=$id"));
 
@@ -89,6 +122,62 @@ class TasksModel extends ChangeNotifier {
     _newStopDate = val;
   }
 
+  bool valodateData(bool isEditor, int? index, BuildContext context) {
+    if (isEditor) {
+      if (tasks[index!].title == '') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              'Название не должно быть пустым',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+        );
+        return false;
+      } else if (tasks[index].stopDate == 'не задано') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              'Дата окончания должна быть указана обязательно',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+        );
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      if (_newTitle == '') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              'Название должно быть указано обязательно',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+        );
+        return false;
+      } else if (_newStopDate == 'не задано') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              'Дата окончания должна быть указана обязательно',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+        );
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+
   Future<void> setNewStopDate(BuildContext context) async {
     final themeModel = Provider.of<ThemeModel>(context, listen: false);
     final date = await showDatePicker(
@@ -96,19 +185,13 @@ class TasksModel extends ChangeNotifier {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              brightness: Brightness.dark,
-              // colorScheme: ColorScheme.light(
-              //   primary: kButtonColor, // header background color
-              //   onPrimary: kTextColorDark, // header text color
-              //   onSurface: themeModel.isDark
-              //       ? kTextColorDark
-              //       : kTextColorLight, // body text color
-              // ),
-              // textButtonTheme: TextButtonThemeData(
-              //   style: TextButton.styleFrom(
-              //     primary: kButtonColor, // button text color
-              //   ),
-              // ),
+              colorScheme: ColorScheme.light(
+                primary: kButtonColor, // header background color
+                onPrimary: kTextColorDark, // header text color
+                onSurface: themeModel.isDark
+                    ? kTextColorDark
+                    : kTextColorLight, // body text color
+              ),
             ),
             child: child!,
           );
@@ -121,23 +204,17 @@ class TasksModel extends ChangeNotifier {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            // timePickerTheme: TimePickerThemeData(
-            //     hourMinuteColor: kButtonColor,
-            //     hourMinuteTextColor:
-            //         themeModel.isDark ? kTextColorDark : kTextColorLight,
-            //     dialTextColor:
-            //         themeModel.isDark ? kTextColorDark : kTextColorLight,
-            //     entryModeIconColor: kButtonColor,
-            //     backgroundColor: themeModel.isDark
-            //         ? kSecondaryColorDark
-            //         : kSecondaryColorLight),
-            brightness: Brightness.dark,
-            // primaryColor: Colors.cyan,
-            // textButtonTheme: TextButtonThemeData(
-            //   style: TextButton.styleFrom(
-            //     primary: kButtonColor,
-            //   ),
-            // ),
+            timePickerTheme: TimePickerThemeData(
+                hourMinuteColor: kButtonColor,
+                hourMinuteTextColor:
+                    themeModel.isDark ? kTextColorDark : kTextColorLight,
+                dialTextColor:
+                    themeModel.isDark ? kTextColorDark : kTextColorLight,
+                entryModeIconColor: kButtonColor,
+                backgroundColor: themeModel.isDark
+                    ? kSecondaryColorDark
+                    : kSecondaryColorLight),
+            primaryColor: Colors.cyan,
           ),
           child: child!,
         );
@@ -146,10 +223,11 @@ class TasksModel extends ChangeNotifier {
       initialTime: TimeOfDay.now(),
     );
     if (date != null && time != null) {
-      final newDate =
-          DateTime(date.year, date.month, date.day, time.hour, time.minute);
-      _newStopDate = DateFormat('dd.MM – kk:mm').format(newDate);
+      final newDate = DateTime(
+          DateTime.now().year, date.month, date.day, time.hour, time.minute);
+      _newStopDate = DateFormat('kk:mm – dd.MM.yyyy').format(newDate);
     }
+    notifyListeners();
   }
 
   Future<void> addTask() async {
@@ -207,6 +285,47 @@ class TasksModel extends ChangeNotifier {
     _newStopDate = 'не задано';
     _newPriority = 'Не срочное';
   }
+
+  //#region Confirmed Tasks
+
+  Future<void> getConfirmedTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString('confirmedTasks');
+    if (data != null) {
+      final jsonData = json.decode(data);
+      jsonData.map((e) => {
+            _confirmedTasks.add(e['id']),
+          });
+    } else {
+      saveConfirmedTasks();
+    }
+  }
+
+  Future<void> saveConfirmedTasks() async {
+    print(_confirmedTasks);
+    var confirmedTasksForSave = [];
+    for (var element in _confirmedTasks) {
+      if (_tasks.contains(element)) {
+        confirmedTasks.add(element);
+      }
+    }
+    final prefs = await SharedPreferences.getInstance();
+    final jsonData = json.encode(confirmedTasksForSave);
+    await prefs.setString('confirmedTasks', jsonData);
+  }
+
+  Future<void> saveConfirmedTask(int id) async {
+    _confirmedTasks.add(id);
+    await saveConfirmedTasks();
+  }
+
+  Future<void> deleteConfirmedTask(int id) async {
+    _confirmedTasks.removeWhere((element) => element == id);
+    await saveConfirmedTasks();
+  }
+
+  //#endregion
+
 }
 
 class Task {

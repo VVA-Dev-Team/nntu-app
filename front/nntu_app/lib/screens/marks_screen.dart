@@ -75,6 +75,7 @@ class MarksScreen extends StatelessWidget {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 8),
                     marksModel.isError
                         ? Center(
                             child: Text(
@@ -350,7 +351,7 @@ class _ListLessonsWigdet extends StatelessWidget {
                 color: themeModel.isDark
                     ? kSecondaryColorDark
                     : kSecondaryColorLight,
-                padding: const EdgeInsets.symmetric(vertical: 3),
+                padding: const EdgeInsets.only(bottom: 3, top: 5),
                 child: GestureDetector(
                   onTap: (() {
                     Navigator.push(

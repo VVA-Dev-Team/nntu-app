@@ -37,15 +37,6 @@ class LessonsScreen extends StatelessWidget {
         color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
         child: Column(
           children: [
-            _SellectWeekWidget(
-              title: schedule.weekNumber,
-              onPressedNext: () {
-                schedule.incrementCount();
-              },
-              onPressedPrev: () {
-                schedule.decrementCount();
-              },
-            ),
             Expanded(
               child: Consumer<LessonsModel>(
                 builder: (context, a, child) => _ListLessonsWigdet(
@@ -167,6 +158,7 @@ class _ListLessonsWigdet extends StatelessWidget {
   Widget build(BuildContext context) {
     print(schedules);
     final themeModel = Provider.of<ThemeModel>(context);
+    final schedule = Provider.of<LessonsModel>(context);
     List<String> weekDays = [
       'ПОНЕДЕЛЬНИК',
       'ВТОРНИК',
@@ -190,61 +182,71 @@ class _ListLessonsWigdet extends StatelessWidget {
       onRefresh: onRefresh,
       onLoading: onLoading,
       child: ListView.builder(
-        itemBuilder: (context, index) => Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: schedules[index].isEmpty
-              ? Container()
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 10, bottom: 3),
-                      child: Text(
-                        weekDays[index],
-                        style: GoogleFonts.getFont(
-                          'Roboto',
-                          fontSize: 14,
-                          color: (themeModel.isDark
-                                  ? kTextColorDark
-                                  : kTextColorLight)
-                              .withOpacity(0.5),
-                        ),
+        itemBuilder: (context, index) => index == 0
+            ? _SellectWeekWidget(
+                title: schedule.weekNumber,
+                onPressedNext: () {
+                  schedule.incrementCount();
+                },
+                onPressedPrev: () {
+                  schedule.decrementCount();
+                },
+              )
+            : Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: schedules[index - 1].isEmpty
+                    ? Container()
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(top: 10, bottom: 3),
+                            child: Text(
+                              weekDays[index - 1],
+                              style: GoogleFonts.getFont(
+                                'Roboto',
+                                fontSize: 14,
+                                color: (themeModel.isDark
+                                        ? kTextColorDark
+                                        : kTextColorLight)
+                                    .withOpacity(0.5),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: themeModel.isDark
+                                  ? kSecondaryColorDark
+                                  : kSecondaryColorLight,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            margin: const EdgeInsets.only(bottom: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: schedules[index - 1].length,
+                              separatorBuilder: (context, index) => Divider(
+                                color: themeModel.isDark
+                                    ? kTextColorDark
+                                    : kTextColorLight,
+                              ),
+                              itemBuilder: (c, i) => _ListItebDayWidget(
+                                title: schedules[index - 1][i].name,
+                                description:
+                                    '${schedules[index - 1][i].type}, ${schedules[index - 1][i].room}',
+                                startTime:
+                                    '${schedules[index - 1][i].startTime ~/ 60}:${schedules[index - 1][i].startTime % 60}',
+                                endTime:
+                                    '${schedules[index - 1][i].stopTime ~/ 60}:${schedules[index - 1][i].stopTime.remainder(60) < 10 ? 0 : ''}${schedules[index - 1][i].stopTime.remainder(60)}',
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: themeModel.isDark
-                            ? kSecondaryColorDark
-                            : kSecondaryColorLight,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      margin: const EdgeInsets.only(bottom: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: schedules[index].length,
-                        separatorBuilder: (context, index) => Divider(
-                          color: themeModel.isDark
-                              ? kTextColorDark
-                              : kTextColorLight,
-                        ),
-                        itemBuilder: (c, i) => _ListItebDayWidget(
-                          title: schedules[index][i].name,
-                          description:
-                              '${schedules[index][i].type}, ${schedules[index][i].room}',
-                          startTime:
-                              '${schedules[index][i].startTime ~/ 60}:${schedules[index][i].startTime % 60}',
-                          endTime:
-                              '${schedules[index][i].stopTime ~/ 60}:${schedules[index][i].stopTime.remainder(60) < 10 ? 0 : ''}${schedules[index][i].stopTime.remainder(60)}',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-        ),
-        itemCount: schedules.length,
+              ),
+        itemCount: schedules.length + 1,
       ),
     );
   }

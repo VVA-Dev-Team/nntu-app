@@ -22,7 +22,7 @@ class MapScreen extends StatelessWidget {
     final themeModel = Provider.of<ThemeModel>(context);
     final mapModel = Provider.of<MapModel>(context);
     return ScreenScaffold(
-      title: 'Карта',
+      title: 'Навигация',
       body: Container(
         color: themeModel.isDark ? kPrimaryColorDark : kPrimaryColorLight,
         child: Consumer<MapModel>(

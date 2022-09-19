@@ -45,53 +45,53 @@ class MarksModel extends ChangeNotifier {
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
 
-    try {
-      var response = await http.get(Uri.parse(
-          "${kDebugMode ? debugHostUrl : releaseHostUrl}api/marks?last_name=${prefs.getString("userSername")}&first_name=${prefs.getString("userName")}&otc=${prefs.getString("userPatronymic")}&n_zach=${prefs.getString("userKey")}&learn_type=${prefs.getString("userType")}"));
-      dynamic responseData = json.decode(response.body);
+    // try {
+    var response = await http.get(Uri.parse(
+        "${kDebugMode ? debugHostUrl : releaseHostUrl}api/marks?last_name=${prefs.getString("userSername")}&first_name=${prefs.getString("userName")}&otc=${prefs.getString("userPatronymic")}&n_zach=${prefs.getString("userKey")}&learn_type=${prefs.getString("userType")}"));
+    final responseData = json.decode(response.body);
 
-      if (response.statusCode == 200) {
-        _semestersCount = responseData["marks"].length;
-        print(responseData['stat']);
-        _marks = MarksData(semesters: [
-          for (var e in responseData["marks"])
-            Semester(marks: [
-              for (var x in e)
-                Mark(
-                  predmet: x["predmet"],
-                  kn1: ControllWeek(
-                      mark: '${x["kn1"]["mark"] ?? ''}',
-                      leave: '${x["kn1"]["leave"] ?? ''}'),
-                  kn2: ControllWeek(
-                      mark: '${x["kn2"]["mark"] ?? ''}',
-                      leave: '${x["kn1"]["leave"] ?? ''}'),
-                  session: x["session"],
-                  typeOfAttestation: x["typeOfAttestation"],
-                ),
-            ])
-        ]);
+    if (response.statusCode == 200) {
+      
+      _semestersCount = responseData["marks"].length;
+      _marks = MarksData(semesters: [
+        for (var e in responseData["marks"])
+          Semester(marks: [
+            for (var x in e)
+              Mark(
+                predmet: x["predmet"],
+                kn1: ControllWeek(
+                    mark: '${x["kn1"]["mark"] ?? ''}',
+                    leave: '${x["kn1"]["leave"] ?? ''}'),
+                kn2: ControllWeek(
+                    mark: '${x["kn2"]["mark"] ?? ''}',
+                    leave: '${x["kn1"]["leave"] ?? ''}'),
+                session: x["session"],
+                typeOfAttestation: x["typeOfAttestation"],
+              ),
+          ])
+      ]);
 
-        List<StatPredmet> newStatPregments = [];
+      List<StatPredmet> newStatPregments = [];
 
-        for (var key in responseData['stat']['predmets'].keys) {
-          newStatPregments.add(StatPredmet(
-              name: key, marks: responseData['stat']['predmets'][key]));
-        }
-        _stat = Stat(
-            predmets: newStatPregments,
-            average: responseData['stat']['average'],
-            term: responseData['stat']['term']);
-      } else {
-        _isError = true;
-        _marks = MarksData(semesters: [Semester(marks: [])]);
-        _semestersCount = 1;
-        _selectedSemester = 1;
-        _errorMessage = 'Пользователь не найден';
+      for (var key in responseData['stat']['predmets'].keys) {
+        newStatPregments.add(StatPredmet(
+            name: key, marks: responseData['stat']['predmets'][key]));
       }
-    } catch (e) {
+      _stat = Stat(
+          predmets: newStatPregments,
+          average: responseData['stat']['average'],
+          term: responseData['stat']['term']);
+    } else {
       _isError = true;
-      _errorMessage = '$e';
+      _marks = MarksData(semesters: [Semester(marks: [])]);
+      _semestersCount = 1;
+      _selectedSemester = 1;
+      _errorMessage = 'Пользователь не найден';
     }
+    // } catch (e) {
+    //   _isError = true;
+    //   _errorMessage = '$e';
+    // }
 
     _isLoading = false;
     _initLoading = false;

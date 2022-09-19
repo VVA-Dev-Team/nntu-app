@@ -10,7 +10,7 @@ const Schedule = sequelize.define('schedule', {
     startTime: {type: DataTypes.INTEGER},
     stopTime: {type: DataTypes.INTEGER},
     day: {type: DataTypes.INTEGER},
-    weeks: {type: DataTypes.ARRAY(DataTypes.INTEGER)},
+    weeks: {type: DataTypes.STRING},
     teacher: {type: DataTypes.STRING, defaultValue: ''},
     comment: {type: DataTypes.STRING, defaultValue: ''},
 })

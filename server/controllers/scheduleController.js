@@ -1,7 +1,6 @@
 const ApiError = require("../error/ApiError");
 const {Schedule} = require('../models/models')
-const {Op} = require('sequelize');
-
+const {Op, INTEGER} = require('sequelize');
 
 class ScheduleController {
     async getSchedule(req, res, next) {
@@ -14,13 +13,19 @@ class ScheduleController {
                         where: {
                             group,
                             day: i,
-                            weeks: {[Op.contains]: [week_number]}
+                            weeks: {[Op.substring]: week_number}
                         }
                     }))
                 }
             } else {
                 for (let i = 0; i < 7; i++) {
                     schedule.push(await Schedule.findAll({where: {group, day: i}}))
+                }
+            }
+
+            for (let i = 0; i < schedule.length; i++) {
+                for (let j = 0; j < schedule[i].length; j++) {
+                    schedule[i][j]['weeks'] = schedule[i][j]['weeks'].split(',').map(Number)
                 }
             }
 
@@ -39,9 +44,10 @@ class ScheduleController {
                 schedule,
                 deleted_schedule,
                 group_password,
+                group_name,
             } = req.body
             let resSchedule = []
-            if (group_password == '123') {
+            if (group_password == checkKey(group_name)) {
                 if (deleted_schedule) {
                     for (let i = 0; i < deleted_schedule.length; i ++) {
                         let id = deleted_schedule[i]
@@ -54,54 +60,59 @@ class ScheduleController {
                 }
                 for (let i = 0; i < schedule.length; i++) {
                     for (let j = 0; j < schedule[i].length; j++) {
-                        const id = schedule[i][j]['id']
-                        if (id) {
-                            const group = schedule[i][j]['group']
-                            const name = schedule[i][j]['name']
-                            const type = schedule[i][j]['type']
-                            const room = schedule[i][j]['room']
-                            const startTime = schedule[i][j]['startTime']
-                            const stopTime = schedule[i][j]['stopTime']
-                            const day = schedule[i][j]['day']
-                            const weeks = schedule[i][j]['weeks']
-                            const teacher = schedule[i][j]['teacher']
-                            const comment = schedule[i][j]['comment']
-                            resSchedule.push(await Schedule.update({
-                                group,
-                                name,
-                                type,
-                                room,
-                                startTime,
-                                stopTime,
-                                day,
-                                weeks,
-                                teacher,
-                                comment
-                            }, {where: {id: id}}))
+                        if (schedule[i][j]['group'] === group_name) {
+                            const id = schedule[i][j]['id']
+                            if (id) {
+                                const group = schedule[i][j]['group']
+                                const name = schedule[i][j]['name']
+                                const type = schedule[i][j]['type']
+                                const room = schedule[i][j]['room']
+                                const startTime = schedule[i][j]['startTime']
+                                const stopTime = schedule[i][j]['stopTime']
+                                const day = schedule[i][j]['day']
+                                const weeks = schedule[i][j]['weeks'].toString();
+                                const teacher = schedule[i][j]['teacher']
+                                const comment = schedule[i][j]['comment']
+                                resSchedule.push(await Schedule.update({
+                                    group,
+                                    name,
+                                    type,
+                                    room,
+                                    startTime,
+                                    stopTime,
+                                    day,
+                                    weeks,
+                                    teacher,
+                                    comment
+                                }, {where: {id: id}}))
+                            } else {
+                                const group = schedule[i][j]['group']
+                                const name = schedule[i][j]['name']
+                                const type = schedule[i][j]['type']
+                                const room = schedule[i][j]['room']
+                                const startTime = schedule[i][j]['startTime']
+                                const stopTime = schedule[i][j]['stopTime']
+                                const day = schedule[i][j]['day']
+                                const weeks = schedule[i][j]['weeks'].toString();
+                                const teacher = schedule[i][j]['teacher']
+                                const comment = schedule[i][j]['comment']
+                                resSchedule.push(await Schedule.create({
+                                    group,
+                                    name,
+                                    type,
+                                    room,
+                                    startTime,
+                                    stopTime,
+                                    day,
+                                    weeks,
+                                    teacher,
+                                    comment
+                                }))
+                            }
                         } else {
-                            const group = schedule[i][j]['group']
-                            const name = schedule[i][j]['name']
-                            const type = schedule[i][j]['type']
-                            const room = schedule[i][j]['room']
-                            const startTime = schedule[i][j]['startTime']
-                            const stopTime = schedule[i][j]['stopTime']
-                            const day = schedule[i][j]['day']
-                            const weeks = schedule[i][j]['weeks']
-                            const teacher = schedule[i][j]['teacher']
-                            const comment = schedule[i][j]['comment']
-                            resSchedule.push(await Schedule.create({
-                                group,
-                                name,
-                                type,
-                                room,
-                                startTime,
-                                stopTime,
-                                day,
-                                weeks,
-                                teacher,
-                                comment
-                            }))
+                            return next(ApiError.forbidden('Не правильно введена группа'))
                         }
+
 
                     }
                 }
@@ -136,7 +147,7 @@ class ScheduleController {
                         const startTime = schedule[i][j]['startTime']
                         const stopTime = schedule[i][j]['stopTime']
                         const day = schedule[i][j]['day']
-                        const weeks = schedule[i][j]['weeks']
+                        const weeks = schedule[i][j]['weeks'].toString();
                         const teacher = schedule[i][j]['teacher']
                         const comment = schedule[i][j]['comment']
                         resSchedule.push(await Schedule.create({
@@ -188,6 +199,33 @@ class ScheduleController {
             return next(ApiError.internal('Не заданы параметры'))
         }
     }
+}
+
+const checkKey = (group) => {
+    const date = new Date()
+    let encodedText = ''
+
+    const string = group
+    const alphabet = process.env.ALPHABET
+
+    console.log(typeof process.env.SECRET_NUMBER)
+
+    let i = 0;
+    while (i < string.length) {
+        if (alphabet.indexOf(string[i]) !== -1) {
+            const alphabetIndex = alphabet.indexOf((string[i]).toUpperCase());
+            if (alphabet[alphabetIndex + (date.getDate() + parseInt(process.env.SECRET_NUMBER))]) {
+                encodedText += alphabet[alphabetIndex + (date.getDate() + parseInt(process.env.SECRET_NUMBER))];
+            } else {
+                encodedText += alphabet[alphabetIndex + (date.getDate() + parseInt(process.env.SECRET_NUMBER)) - 75];
+            }
+        } else {
+            encodedText += string[i];
+        }
+        i++;
+    }
+
+    return encodedText
 }
 
 module.exports = new ScheduleController()
