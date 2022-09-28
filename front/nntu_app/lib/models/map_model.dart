@@ -54,13 +54,12 @@ class MapModel extends ChangeNotifier {
     searchImage(false);
   }
 
-  String _imageURL =
-      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/1/1level non-active.png';
+  String _imageURL = 'assets/navigate/1/1level non-active.png';
   String get imageURL => _imageURL;
 
   // void loadImage() {
   //   _imageURL =
-  //       '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/${_building}/${_floor}level non-active.png';
+  //       'assets/navigate/${_building}/${_floor}level non-active.png';
   //   notifyListeners();
   // }
 
@@ -89,8 +88,7 @@ class MapModel extends ChangeNotifier {
 
     if (_searchRoomNumber != 0) {
       if (_floor == requestedFloor && _building == requestedBuilding) {
-        _imageURL =
-            '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/$_searchRoomNumber.png';
+        _imageURL = 'assets/navigate/$_building/$_searchRoomNumber.png';
       } else {
         if (requestedBuilding == _building) {
           switch (_building) {
@@ -99,32 +97,29 @@ class MapModel extends ChangeNotifier {
               if (_floor < requestedFloor &&
                   weirdBlock.contains(_searchRoomNumber)) {
                 _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up weird.png';
+                    'assets/navigate/$_building/${_floor}level up weird.png';
               } else if (_floor < requestedFloor) {
-                _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up.png';
+                _imageURL = 'assets/navigate/$_building/${_floor}level up.png';
               } else if (_searchRoomNumber == 1161 && _floor == 2) {
                 _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level down.png';
+                    'assets/navigate/$_building/${_floor}level down.png';
               } else {
                 _imageURL = showemptyfloors();
               }
               break;
             case 2:
               if (_floor < requestedFloor) {
-                _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up.png';
+                _imageURL = 'assets/navigate/$_building/${_floor}level up.png';
               } else if (_floor == 2 && requestedFloor == 1) {
                 _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level down.png';
+                    'assets/navigate/$_building/${_floor}level down.png';
               } else {
                 _imageURL = showemptyfloors();
               }
               break;
             case 3:
               if (_floor < requestedFloor) {
-                _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up.png';
+                _imageURL = 'assets/navigate/$_building/${_floor}level up.png';
               } else {
                 _imageURL = showemptyfloors();
               }
@@ -134,10 +129,9 @@ class MapModel extends ChangeNotifier {
                       (_searchRoomNumber > 4303 && _searchRoomNumber < 4313)) &&
                   (_floor < requestedFloor)) {
                 _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up sec.png';
+                    'assets/navigate/$_building/${_floor}level up sec.png';
               } else if (_floor < requestedFloor) {
-                _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up.png';
+                _imageURL = 'assets/navigate/$_building/${_floor}level up.png';
               } else {
                 _imageURL = showemptyfloors();
               }
@@ -150,60 +144,58 @@ class MapModel extends ChangeNotifier {
                           _searchRoomNumber == 5402)) &&
                   _floor < requestedFloor) {
                 _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up sec.png';
+                    'assets/navigate/$_building/${_floor}level up sec.png';
               } else if (_floor > 0 && _floor < requestedFloor) {
-                _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up.png';
+                _imageURL = 'assets/navigate/$_building/${_floor}level up.png';
               } else {
                 _imageURL = showemptyfloors();
               }
               break;
             case 6:
               if (_floor > 1 && _floor < requestedFloor) {
-                _imageURL =
-                    '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up.png';
+                _imageURL = 'assets/navigate/$_building/${_floor}level up.png';
               } else if (_floor > requestedFloor && requestedFloor != 0) {
                 _imageURL = showemptyfloors();
               } else if (_floor == 1) {
                 if (_searchRoomNumber == 6243) {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up 6243.png';
+                      'assets/navigate/$_building/${_floor}level up 6243.png';
                 } else if (_searchRoomNumber == 6244) {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up 6244.png';
+                      'assets/navigate/$_building/${_floor}level up 6244.png';
                 } else if (_searchRoomNumber == 6245 ||
                     _searchRoomNumber == 6246) {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up B3.png';
+                      'assets/navigate/$_building/${_floor}level up B3.png';
                 } else if (_searchRoomNumber >= 6247 &&
                     _searchRoomNumber <= 6257) {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up B4.png';
+                      'assets/navigate/$_building/${_floor}level up B4.png';
                 } else if (_searchRoomNumber == 6258 ||
                     _searchRoomNumber == 6259) {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up B5.png';
+                      'assets/navigate/$_building/${_floor}level up B5.png';
                 } else if (_searchRoomNumber >= 6260 &&
                     _searchRoomNumber <= 6269) {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up B6.png';
+                      'assets/navigate/$_building/${_floor}level up B6.png';
                 } else if (_searchRoomNumber == 6270) {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up B7.png';
+                      'assets/navigate/$_building/${_floor}level up B7.png';
                 } else if (_searchRoomNumber == 6020) {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level down 6020.png';
+                      'assets/navigate/$_building/${_floor}level down 6020.png';
                 } else if (_searchRoomNumber >= 6103 &&
                     _searchRoomNumber <= 6110) {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level down B3.png';
+                      'assets/navigate/$_building/${_floor}level down B3.png';
                 } else if (_searchRoomNumber >= 6022 &&
                     _searchRoomNumber <= 6043) {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level down B4 B6.png';
+                      'assets/navigate/$_building/${_floor}level down B4 B6.png';
                 } else {
                   _imageURL =
-                      '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level up.png';
+                      'assets/navigate/$_building/${_floor}level up.png';
                 }
               } else if (requestedFloor == 0 && _floor > 1) {
                 _imageURL = showemptyfloors();
@@ -226,6 +218,6 @@ class MapModel extends ChangeNotifier {
   }
 
   String showemptyfloors() {
-    return '${kDebugMode ? debugHostUrl : releaseHostUrl}static/navigate/$_building/${_floor}level non-active.png';
+    return 'assets/navigate/$_building/${_floor}level non-active.png';
   }
 }

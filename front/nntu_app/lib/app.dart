@@ -2,7 +2,6 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:nntu_app/models/init_model.dart';
 import 'package:nntu_app/models/navigation_model.dart';
-import 'package:nntu_app/screens/instruction_screen.dart';
 import 'package:nntu_app/screens/introduction_animation/introduction_animation_screen.dart';
 import 'package:provider/provider.dart';
 

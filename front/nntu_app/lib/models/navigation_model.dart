@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nntu_app/screens/additionally_screen.dart';
-import 'package:nntu_app/screens/lessons_screen.dart';
+import 'package:nntu_app/screens/lessons/lessons_screen.dart';
 import 'package:nntu_app/screens/map_screen.dart';
 import 'package:nntu_app/screens/marks_screen.dart';
 import 'package:nntu_app/screens/news_screen.dart';

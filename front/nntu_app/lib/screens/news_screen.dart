@@ -1,4 +1,3 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -295,7 +294,7 @@ class _AdminNewsCard extends StatelessWidget {
                     bottomLeft: Radius.circular(16),
                     bottomRight: Radius.circular(16),
                   ),
-                  child: ExtendedImage.network(
+                  child: Image.network(
                     '${kDebugMode ? debugHostUrl : releaseHostUrl}static/events/$fileName',
                     fit: BoxFit.cover,
                   ),
@@ -403,7 +402,7 @@ class _SystemNewsCard extends StatelessWidget {
                     bottomLeft: Radius.circular(16),
                     bottomRight: Radius.circular(16),
                   ),
-                  child: ExtendedImage.network(
+                  child: Image.network(
                     fileName,
                     fit: BoxFit.cover,
                   ),
@@ -464,7 +463,7 @@ class __NewsDetailsScreenState extends State<_NewsDetailsScreen> {
                       bottomLeft: Radius.circular(16),
                       bottomRight: Radius.circular(16),
                     ),
-                    child: ExtendedImage.network(
+                    child: Image.network(
                       '${kDebugMode ? debugHostUrl : releaseHostUrl}static/events/${widget.fileName}',
                       fit: BoxFit.cover,
                     ),

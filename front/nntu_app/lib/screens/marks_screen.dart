@@ -94,10 +94,11 @@ class MarksScreen extends StatelessWidget {
                                 innerColor: themeModel.isDark
                                     ? kSecondaryColorDark
                                     : kSecondaryColorLight,
+
                                 current: marksModel.selectedSemester,
                                 values: List.generate(marksModel.semestersCount,
                                     (index) => index + 1),
-                                iconOpacity: 0.2,
+                                iconOpacity: 1,
                                 borderColor: themeModel.isDark
                                     ? kPrimaryColorDark
                                     : kPrimaryColorLight,
@@ -107,8 +108,12 @@ class MarksScreen extends StatelessWidget {
                                     child: Text(
                                       value.toString(),
                                       textAlign: TextAlign.center,
-                                      style:
-                                          Theme.of(context).textTheme.headline2,
+                                      style: GoogleFonts.getFont(
+                                        'Roboto',
+                                        fontSize: 18,
+                                        color: const Color.fromARGB(
+                                            255, 209, 209, 209),
+                                      ),
                                     ),
                                   );
                                 },

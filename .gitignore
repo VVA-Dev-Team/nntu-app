@@ -76,7 +76,8 @@
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 /front/nntu_app/lib/keys.dart
-/server/node_modules/
+/server/main_backend/node_modules/
+/server/news_parser/node_modules/
 /server/server.rar
 
 .env
